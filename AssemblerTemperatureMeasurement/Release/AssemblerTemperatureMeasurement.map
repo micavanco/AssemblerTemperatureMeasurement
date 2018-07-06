@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Thu Jul 05 23:58:00 2018
+AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Fri Jul 06 22:03:18 2018
 
 
 EQU  SIGNATURE_000 0000001e
@@ -826,5 +826,16 @@ EQU  URXC1addr    00000038
 EQU  UDRE1addr    0000003a
 EQU  UTXC1addr    0000003c
 EQU  INT_VECTORS_SIZE 0000003e
-CSEG start        00000000
-CSEG main         00000015
+CSEG start        00000022
+CSEG Tim0_compA   00000051
+DEF  RED_LED      r18
+DEF  GREEN_LED    r20
+DEF  BLUE_LED     r22
+DEF  counter      r17
+CSEG main         00000044
+CSEG toone        0000004f
+CSEG delay        0000005e
+CSEG zero         0000005c
+CSEG off          00000059
+CSEG back         0000005d
+CSEG L1           00000060
