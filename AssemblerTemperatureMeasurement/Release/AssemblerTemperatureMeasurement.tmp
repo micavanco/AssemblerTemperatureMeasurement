@@ -24,13 +24,13 @@
  </OUTPUT_FILES>
  <LABELS>
   <start><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>14</LINE></start>
-  <Tim0_compA><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>73</LINE></Tim0_compA>
-  <main><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>58</LINE></main>
-  <toone><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>68</LINE></toone>
-  <delay><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>91</LINE></delay>
-  <zero><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>86</LINE></zero>
-  <off><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>82</LINE></off>
-  <back><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>88</LINE></back>
-  <L1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>94</LINE></L1>
+  <Tim0_compA><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>77</LINE></Tim0_compA>
+  <main><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>59</LINE></main>
+  <toone><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>72</LINE></toone>
+  <delay><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>95</LINE></delay>
+  <zero><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>90</LINE></zero>
+  <off><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>86</LINE></off>
+  <back><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>92</LINE></back>
+  <L1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>98</LINE></L1>
  </LABELS>
 </ASSEMBLER_INFO>
