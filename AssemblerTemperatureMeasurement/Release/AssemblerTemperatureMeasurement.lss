@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Mon Jul 09 18:47:09 2018
+AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Wed Jul 11 23:47:05 2018
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644pdef.inc'
 C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644Pdef.inc'
@@ -1159,98 +1159,157 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  ; Author : MO
                                  ;
                                  .list 
+                                 ;-------------------------------------------
+                                 ;    Declaring constants for LCD driver
+                                 .equ D_LCD	 = DDRA  ; register of direction LCD
+                                 .equ O_LCD   = PORTA ; output port register of LCD
+                                 .equ LCD_RS  = 0     ; number of RS  signal line
+                                 .equ LCD_EN  = 1     ; number of E   signal line
+                                 .equ LCD_DB4 = 4     ; number of DB4 signal line
+                                 .equ LCD_DB5 = 5     ; number of DB5 signal line
+                                 .equ LCD_DB6 = 6     ; number of DB6 signal line
+                                 .equ LCD_DB7 = 7     ; number of DB7 signal line
                                  
                                  .cseg 
-000000 c021                      .org $0000 rjmp start
-000020 940c 0058                 .org OC0Aaddr jmp Tim0_compA  ;Overflow0 Interrupt Vector Address
+000000 940c 0022                 .org $0000 jmp start
+000020 940c 007a                 .org OC0Aaddr jmp Tim0_compA  ;Overflow0 Interrupt Vector Address
+                                 
                                  start:
                                  .DEF RED_LED=R18	;defining variables
                                  .DEF GREEN_LED=R20
                                  .DEF BLUE_LED=R22
                                  .DEF counter=R17
+                                 .DEF DELAY_TIME=R25
+                                 .DEF DELAY_MUL=R24
                                  
 000022 94f8                      cli					;disable interrupts 
                                  
-000023 ec18                      ldi counter, 200
-000024 e022                      ldi RED_LED, 2		
+000023 e100                      ldi R16, high(RAMEND) ;initialization of stack pointer
+000024 ef1f                      ldi R17, low(RAMEND)
+000025 bf0e                      out SPH, R16
+000026 bf1d                      out SPL, R17
                                  
-000025 9100 00b0                 lds R16, TCCR2A		;load address of TCCR2A to R16
-000027 6c03                      ORI R16, (1<<COM2A1)|(1<<COM2A0)|(1<<WGM20)|(1<<WGM21) ; load data to R16 (logical OR operation), set OC2A on Compare Match, clear OC2A at BOTTOM (inverting mode) fastPWM
-000028 9300 00b0                 sts TCCR2A, R16		;store direct to data space I/O from R16
+000027 ec18                      ldi counter, 200
+000028 e022                      ldi RED_LED, 2	
+000029 e082                      ldi DELAY_MUL, 2
+00002a e095                      ldi DELAY_TIME, 5	
                                  
-00002a 9100 00b1                 lds R16, TCCR2B		;load address of TCCR2B to R16
-00002c 6001                      ORI R16, (1<<CS20)	;load to R16 data (logical OR operation), set (No prescaling)
-00002d 9300 00b1                 sts TCCR2B, R16		;store direct to data space I/O from R16
+00002b 9100 00b0                 lds R16, TCCR2A		;load address of TCCR2A to R16
+00002d 6c03                      ORI R16, (1<<COM2A1)|(1<<COM2A0)|(1<<WGM20)|(1<<WGM21) ; load data to R16 (logical OR operation), set OC2A on Compare Match, clear OC2A at BOTTOM (inverting mode) fastPWM
+00002e 9300 00b0                 sts TCCR2A, R16		;store direct to data space I/O from R16
                                  
-00002f 9100 00b3                 lds R16, OCR2A		;load address of OCR2A to R16
-000031 2f02                      mov R16, RED_LED	;load value to R16
-000032 9300 00b3                 sts OCR2A, R16		;store direct to data space from R16
+000030 9100 00b1                 lds R16, TCCR2B		;load address of TCCR2B to R16
+000032 6001                      ORI R16, (1<<CS20)	;load to R16 data (logical OR operation), set (No prescaling)
+000033 9300 00b1                 sts TCCR2B, R16		;store direct to data space I/O from R16
                                  
-000034 ec02                      ldi R16, (1<<COM0A1)|(1<<COM0A0)|(1<<WGM01) ;set compare output mode, clear OC0A at BOTTOM (inverting mode) CTC
-000035 bd04                      out TCCR0A, R16
-000036 e002                      ldi R16, (1<<CS01)	;set /8 (From prescaler)
-000037 bd05                      out TCCR0B, R16
-000038 ec08                      ldi R16, 200
-000039 bd07                      out OCR0A, R16
-00003a 9100 006e                 lds R16, TIMSK0		;load address of TIMSK0 to R16
-00003c 6002                      ORI R16, (1<<OCIE0A);load to R16 data (logical OR operation), set interrupt on compare enable
-00003d 9300 006e                 sts TIMSK0, R16		;store direct to data space from R16
+000035 9100 00b3                 lds R16, OCR2A		;load address of OCR2A to R16
+000037 2f02                      mov R16, RED_LED	;load value to R16
+000038 9300 00b3                 sts OCR2A, R16		;store direct to data space from R16
                                  
-00003f 9a3a                      sbi DDRC, DDC2		;set Data Direct Register as a input
-000040 9a39                      sbi DDRC, DDC1		;set Data Direct Register as a input
-000041 9a57                      sbi DDRD, DDD7
-000042 9a50                      sbi DDRD, (0<<DDD6) ;set Data Direct Register as a output (connected button)
+00003a ec02                      ldi R16, (1<<COM0A1)|(1<<COM0A0)|(1<<WGM01) ;set compare output mode, clear OC0A at BOTTOM (inverting mode) CTC
+00003b bd04                      out TCCR0A, R16
+00003c e002                      ldi R16, (1<<CS01)	;set /8 (From prescaler)
+00003d bd05                      out TCCR0B, R16
+00003e ec08                      ldi R16, 200
+00003f bd07                      out OCR0A, R16
+000040 9100 006e                 lds R16, TIMSK0		;load address of TIMSK0 to R16
+000042 6002                      ORI R16, (1<<OCIE0A);load to R16 data (logical OR operation), set interrupt on compare enable
+000043 9300 006e                 sts TIMSK0, R16		;store direct to data space from R16
                                  
-000043 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ;set Port as a output
-000044 b908                      out PORTC, R16 
-000045 e400                      ldi R16, (0<<PIND7)|(1<<PIND6) ;pull-up internal resistor in PIND6
-000046 b90b                      out PORTD, R16 
-000047 9478                      sei					;enable interrupts
+000045 9a3a                      sbi DDRC, DDC2		;set Data Direct Register as a input
+000046 9a39                      sbi DDRC, DDC1		;set Data Direct Register as a input
+000047 9a57                      sbi DDRD, DDD7
+000048 9a50                      sbi DDRD, (0<<DDD6) ;set Data Direct Register as a output (connected button)
+                                 
+000049 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ;set Port as a output
+00004a b908                      out PORTC, R16 
+00004b e400                      ldi R16, (0<<PIND7)|(1<<PIND6) ;pull-up internal resistor in PIND6
+00004c b90b                      out PORTD, R16 
+00004d 9478                      sei					;enable interrupts
                                  
                                  ;*************************************************
                                  main:				;main loop
-000048 994e                      sbic PIND, PIND6	;wait for pushed button (if PIND6 is clear, skip next instruction)
-000049 cffe                      rjmp main
-00004a 0000                      nop
-00004b 9523                      inc RED_LED			;increment value
-00004c 3f2c                      cpi	RED_LED, 252	;if R18 equals or higher 252 do next command
-00004d f440                      brsh toone
-00004e 9130 00b3                 lds R19, OCR2A		;load address of OCR2A to R16
-000050 2f32                      mov R19, RED_LED	;load value to R16
-000051 9330 00b3                 sts OCR2A, R19		;store direct to data space from R16
-000053 0000                      nop 
-000054 c010                      rjmp delay
-000055 cff2                      rjmp main
+00004e 994e                      sbic PIND, PIND6	;wait for pushed button (if PIND6 is clear, skip next instruction)
+00004f cffe                      rjmp main
+000050 0000                      nop
+000051 9523                      inc RED_LED			;increment value
+000052 3f2c                      cpi	RED_LED, 252	;if R18 equals or higher 252 do next command
+000053 f448                      brsh toone
+000054 9130 00b3                 lds R19, OCR2A		;load address of OCR2A to R16
+000056 2f32                      mov R19, RED_LED	;load value to R16
+000057 9330 00b3                 sts OCR2A, R19		;store direct to data space from R16
+000059 0000                      nop 
+00005a 940e 0061                 call delay_ms
+00005c cff1                      rjmp main
                                  toone: 
-000056 e021                      ldi RED_LED, 1
-000057 c00d                      rjmp delay
+00005d e021                      ldi RED_LED, 1
+00005e 940e 0061                 call delay_ms
+000060 cfed                      rjmp main
                                  ;*************************************************		
                                  
-                                 Tim0_compA:
-000058 951a                      dec counter			;decrement value
-000059 3011                      cpi counter, 1		
-00005a f040                      brlo zero			;if value counter lower than 1 go to zero
-00005b 1712                      cp counter, R18
-00005c f418                      brsh off			;if value of register R18 higher or same go to off
-00005d e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ;set Port as a input
-00005e b908                      out PORTC, R16
-00005f c004                      rjmp back
-                                 off:
-000060 e000                      ldi R16, (0<<PINC1)|(0<<PINC2) ;set Port as a output
-000061 b908                      out PORTC, R16 
-000062 c001                      rjmp back
-                                 zero:
-000063 ec18                      ldi counter, 200
-                                 back:
-000064 9518                      reti				;return from interrupt 
+                                 ;---------------------------------------------------------
+                                 ;     Delay functions
+                                 delay_ms:
+000061 933f                      	push R19				;push values to stack
+000062 934f                      	push R20
+000063 935f                      	push R21
+000064 930f                      	push R16
                                  
-                                 delay:
-000065 e00a                          ldi  r16, 10
-000066 ed8c                          ldi  r24, 220
-000067 950a                      L1: dec  r16
-000068 f7f1                          brne L1
-000069 958a                          dec  r24
-00006a f7e1                          brne L1
+000065 2f38                      	mov R19, DELAY_MUL		;copy value to register
+000066 2f49                      	mov R20, DELAY_TIME
+000067 e150                      	ldi R21, 16
+                                 
+                                 Wait_ms_0:				;_______________________
+000068 2f49                      	mov R20, DELAY_TIME ;			loop 0		\
+                                 Wait_ms_1:				;__________________		|
+000069 2f38                      	mov R19, DELAY_MUL  ;			loop 1	\	|
+                                 Wait_ms_2:				;_______________	|	|
+00006a ef09                      	ldi R16, 249		;		loop 2	\	|	|
+00006b 0000                      	nop					;				|	|	|
+                                 Wait_ms_3:				;______			|	|	|
+00006c 0000                      	nop					;loop 3	\		|	|	|
+00006d 950a                      	dec R16				;		/		|	|	|
+00006e f7e9                      	brne Wait_ms_3		;______/		|	|	|
+00006f 953a                          dec R19				;				/	|	|	
+000070 f7c9                      	brne Wait_ms_2		;______________/	|	|
+000071 954a                      	dec R20				;				   /	|
+000072 f7b1                      	brne Wait_ms_1		;_________________/		|
+000073 955a                      	dec R21				;						/
+000074 f799                      	brne Wait_ms_0		;______________________/
+                                 
+000075 910f                      	pop R16
+000076 915f                      	pop R21					;get values from stack 
+000077 914f                      	pop R20
+000078 913f                      	pop R19
+000079 9508                      ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Function to send byte to LCD
+                                 
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Interrupt functions
+                                 
+                                 Tim0_compA:
+00007a 930f                      push R16
+00007b 951a                      dec counter			;decrement value
+00007c 3011                      cpi counter, 1		
+00007d f040                      brlo zero			;if value counter lower than 1 go to zero
+00007e 1712                      cp counter, R18
+00007f f418                      brsh off			;if value of register R18 higher or same go to off
+000080 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ;set Port as a input
+000081 b908                      out PORTC, R16
+000082 c004                      rjmp back
+                                 off:
+000083 e000                      ldi R16, (0<<PINC1)|(0<<PINC2) ;set Port as a output
+000084 b908                      out PORTC, R16 
+000085 c001                      rjmp back
+                                 zero:
+000086 ec18                      ldi counter, 200
+                                 back:
+000087 910f                      pop R16
+000088 9518                      reti				;return from interrupt 
+                                 
 
 
 RESOURCE USE INFORMATION
@@ -1270,37 +1329,37 @@ counted separately from r26..r31 here.
 "ATmega644P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  28 r17:   5 r18:   7 r19:   3 r20:   0 
-r21:   0 r22:   0 r23:   0 r24:   2 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  34 r17:   7 r18:   7 r19:   8 r20:   5 
+r21:   4 r22:   0 r23:   0 r24:   3 r25:   3 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 5 out of 35 (14.3%)
+Registers used: 8 out of 35 (22.9%)
 
 "ATmega644P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :   2 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
+brne  :   4 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   2 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
-cpi   :   2 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   1 jmp   :   1 
-ld    :   0 ldd   :   0 ldi   :  13 lds   :   5 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   2 or    :   0 ori   :   3 out   :   7 pop   :   0 
-push  :   0 rcall :   0 ret   :   0 reti  :   1 rjmp  :   8 rol   :   0 
+cpi   :   2 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   1 jmp   :   2 
+ld    :   0 ldd   :   0 ldi   :  17 lds   :   5 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   6 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   4 or    :   0 ori   :   3 out   :   9 pop   :   5 
+push  :   5 rcall :   0 ret   :   1 reti  :   1 rjmp  :   5 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   4 sbic  :   1 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   5 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 21 out of 113 (18.6%)
+Instructions used: 25 out of 113 (22.1%)
 
 "ATmega644P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0000d8    154      0    154   65536   0.2%
+[.cseg] 0x000000 0x000112    214      0    214   65536   0.3%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    2048   0.0%
 

@@ -7,20 +7,40 @@
 .nolist 
 .include "m644Pdef.inc"
 .list 
+;-------------------------------------------
+;    Declaring constants for LCD driver
+.equ D_LCD	 = DDRA  ; register of direction LCD
+.equ O_LCD   = PORTA ; output port register of LCD
+.equ LCD_RS  = 0     ; number of RS  signal line
+.equ LCD_EN  = 1     ; number of E   signal line
+.equ LCD_DB4 = 4     ; number of DB4 signal line
+.equ LCD_DB5 = 5     ; number of DB5 signal line
+.equ LCD_DB6 = 6     ; number of DB6 signal line
+.equ LCD_DB7 = 7     ; number of DB7 signal line
 
 .cseg 
-.org $0000 rjmp start
+.org $0000 jmp start
 .org OC0Aaddr jmp Tim0_compA  ;Overflow0 Interrupt Vector Address
+
 start:
 .DEF RED_LED=R18	;defining variables
 .DEF GREEN_LED=R20
 .DEF BLUE_LED=R22
 .DEF counter=R17
+.DEF DELAY_TIME=R25
+.DEF DELAY_MUL=R24
 
 cli					;disable interrupts 
 
+ldi R16, high(RAMEND) ;initialization of stack pointer
+ldi R17, low(RAMEND)
+out SPH, R16
+out SPL, R17
+
 ldi counter, 200
-ldi RED_LED, 2		
+ldi RED_LED, 2	
+ldi DELAY_MUL, 2
+ldi DELAY_TIME, 5	
 
 lds R16, TCCR2A		;load address of TCCR2A to R16
 ORI R16, (1<<COM2A1)|(1<<COM2A0)|(1<<WGM20)|(1<<WGM21) ; load data to R16 (logical OR operation), set OC2A on Compare Match, clear OC2A at BOTTOM (inverting mode) fastPWM
@@ -67,14 +87,59 @@ lds R19, OCR2A		;load address of OCR2A to R16
 mov R19, RED_LED	;load value to R16
 sts OCR2A, R19		;store direct to data space from R16
 nop 
-rjmp delay
+call delay_ms
 rjmp main
 toone: 
 ldi RED_LED, 1
-rjmp delay
+call delay_ms
+rjmp main
 ;*************************************************		
 
+;---------------------------------------------------------
+;     Delay functions
+delay_ms:
+	push R19				;push values to stack
+	push R20
+	push R21
+	push R16
+
+	mov R19, DELAY_MUL		;copy value to register
+	mov R20, DELAY_TIME
+	ldi R21, 16
+
+Wait_ms_0:				;_______________________
+	mov R20, DELAY_TIME ;			loop 0		\
+Wait_ms_1:				;__________________		|
+	mov R19, DELAY_MUL  ;			loop 1	\	|
+Wait_ms_2:				;_______________	|	|
+	ldi R16, 249		;		loop 2	\	|	|
+	nop					;				|	|	|
+Wait_ms_3:				;______			|	|	|
+	nop					;loop 3	\		|	|	|
+	dec R16				;		/		|	|	|
+	brne Wait_ms_3		;______/		|	|	|
+    dec R19				;				/	|	|	
+	brne Wait_ms_2		;______________/	|	|
+	dec R20				;				   /	|
+	brne Wait_ms_1		;_________________/		|
+	dec R21				;						/
+	brne Wait_ms_0		;______________________/
+
+	pop R16
+	pop R21					;get values from stack 
+	pop R20
+	pop R19
+ret
+
+;---------------------------------------------------------
+;     Function to send byte to LCD
+
+
+;---------------------------------------------------------
+;     Interrupt functions
+
 Tim0_compA:
+push R16
 dec counter			;decrement value
 cpi counter, 1		
 brlo zero			;if value counter lower than 1 go to zero
@@ -90,13 +155,6 @@ rjmp back
 zero:
 ldi counter, 200
 back:
+pop R16
 reti				;return from interrupt 
 
-delay:
-    ldi  r16, 10
-    ldi  r24, 220
-L1: dec  r16
-    brne L1
-    dec  r24
-    brne L1
-rjmp main
