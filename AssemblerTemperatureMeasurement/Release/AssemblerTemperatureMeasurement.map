@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Wed Jul 11 23:47:05 2018
+AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Thu Jul 12 20:12:56 2018
 
 
 EQU  SIGNATURE_000 0000001e
@@ -826,29 +826,25 @@ EQU  URXC1addr    00000038
 EQU  UDRE1addr    0000003a
 EQU  UTXC1addr    0000003c
 EQU  INT_VECTORS_SIZE 0000003e
-EQU  D_LCD        00000001
-EQU  O_LCD        00000002
-EQU  LCD_RS       00000000
-EQU  LCD_EN       00000001
-EQU  LCD_DB4      00000004
-EQU  LCD_DB5      00000005
-EQU  LCD_DB6      00000006
-EQU  LCD_DB7      00000007
 CSEG start        00000022
-CSEG Tim0_compA   0000007a
+CSEG Tim0_compA   00000061
 DEF  RED_LED      r18
 DEF  GREEN_LED    r20
 DEF  BLUE_LED     r22
 DEF  counter      r17
 DEF  DELAY_TIME   r25
 DEF  DELAY_MUL    r24
+DEF  DATA_TO_SEND r23
 CSEG main         0000004e
 CSEG toone        0000005d
-CSEG delay_ms     00000061
-CSEG Wait_ms_0    00000068
-CSEG Wait_ms_1    00000069
-CSEG Wait_ms_2    0000006a
-CSEG Wait_ms_3    0000006c
-CSEG zero         00000086
-CSEG off          00000083
-CSEG back         00000087
+CSEG delay_ms     00000070
+CSEG zero         0000006d
+CSEG off          0000006a
+CSEG back         0000006e
+CSEG Wait_ms_0    00000077
+CSEG Wait_ms_1    00000078
+CSEG Wait_ms_2    00000079
+CSEG Wait_ms_3    0000007b
+CSEG delay_us     00000089
+CSEG Wait_us_0    0000008d
+CSEG Wait_us_1    0000008e

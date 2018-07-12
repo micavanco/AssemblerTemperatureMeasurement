@@ -1,10 +1,12 @@
 
-AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Wed Jul 11 23:47:05 2018
+AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Thu Jul 12 20:12:56 2018
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644pdef.inc'
 C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644Pdef.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(114): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644pdef.inc'
 C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644Pdef.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(114): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc'
                                  
                                  ;
                                  
@@ -1159,20 +1161,10 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  ; Author : MO
                                  ;
                                  .list 
-                                 ;-------------------------------------------
-                                 ;    Declaring constants for LCD driver
-                                 .equ D_LCD	 = DDRA  ; register of direction LCD
-                                 .equ O_LCD   = PORTA ; output port register of LCD
-                                 .equ LCD_RS  = 0     ; number of RS  signal line
-                                 .equ LCD_EN  = 1     ; number of E   signal line
-                                 .equ LCD_DB4 = 4     ; number of DB4 signal line
-                                 .equ LCD_DB5 = 5     ; number of DB5 signal line
-                                 .equ LCD_DB6 = 6     ; number of DB6 signal line
-                                 .equ LCD_DB7 = 7     ; number of DB7 signal line
                                  
                                  .cseg 
 000000 940c 0022                 .org $0000 jmp start
-000020 940c 007a                 .org OC0Aaddr jmp Tim0_compA  ;Overflow0 Interrupt Vector Address
+000020 940c 0061                 .org OC0Aaddr jmp Tim0_compA  ;Overflow0 Interrupt Vector Address
                                  
                                  start:
                                  .DEF RED_LED=R18	;defining variables
@@ -1181,6 +1173,7 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  .DEF counter=R17
                                  .DEF DELAY_TIME=R25
                                  .DEF DELAY_MUL=R24
+                                 .DEF DATA_TO_SEND=R23
                                  
 000022 94f8                      cli					;disable interrupts 
                                  
@@ -1239,77 +1232,107 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
 000056 2f32                      mov R19, RED_LED	;load value to R16
 000057 9330 00b3                 sts OCR2A, R19		;store direct to data space from R16
 000059 0000                      nop 
-00005a 940e 0061                 call delay_ms
+00005a 940e 0070                 call delay_ms
 00005c cff1                      rjmp main
                                  toone: 
 00005d e021                      ldi RED_LED, 1
-00005e 940e 0061                 call delay_ms
+00005e 940e 0070                 call delay_ms
 000060 cfed                      rjmp main
                                  ;*************************************************		
-                                 
-                                 ;---------------------------------------------------------
-                                 ;     Delay functions
-                                 delay_ms:
-000061 933f                      	push R19				;push values to stack
-000062 934f                      	push R20
-000063 935f                      	push R21
-000064 930f                      	push R16
-                                 
-000065 2f38                      	mov R19, DELAY_MUL		;copy value to register
-000066 2f49                      	mov R20, DELAY_TIME
-000067 e150                      	ldi R21, 16
-                                 
-                                 Wait_ms_0:				;_______________________
-000068 2f49                      	mov R20, DELAY_TIME ;			loop 0		\
-                                 Wait_ms_1:				;__________________		|
-000069 2f38                      	mov R19, DELAY_MUL  ;			loop 1	\	|
-                                 Wait_ms_2:				;_______________	|	|
-00006a ef09                      	ldi R16, 249		;		loop 2	\	|	|
-00006b 0000                      	nop					;				|	|	|
-                                 Wait_ms_3:				;______			|	|	|
-00006c 0000                      	nop					;loop 3	\		|	|	|
-00006d 950a                      	dec R16				;		/		|	|	|
-00006e f7e9                      	brne Wait_ms_3		;______/		|	|	|
-00006f 953a                          dec R19				;				/	|	|	
-000070 f7c9                      	brne Wait_ms_2		;______________/	|	|
-000071 954a                      	dec R20				;				   /	|
-000072 f7b1                      	brne Wait_ms_1		;_________________/		|
-000073 955a                      	dec R21				;						/
-000074 f799                      	brne Wait_ms_0		;______________________/
-                                 
-000075 910f                      	pop R16
-000076 915f                      	pop R21					;get values from stack 
-000077 914f                      	pop R20
-000078 913f                      	pop R19
-000079 9508                      ret
-                                 
-                                 ;---------------------------------------------------------
-                                 ;     Function to send byte to LCD
-                                 
                                  
                                  ;---------------------------------------------------------
                                  ;     Interrupt functions
                                  
                                  Tim0_compA:
-00007a 930f                      push R16
-00007b 951a                      dec counter			;decrement value
-00007c 3011                      cpi counter, 1		
-00007d f040                      brlo zero			;if value counter lower than 1 go to zero
-00007e 1712                      cp counter, R18
-00007f f418                      brsh off			;if value of register R18 higher or same go to off
-000080 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ;set Port as a input
-000081 b908                      out PORTC, R16
-000082 c004                      rjmp back
+000061 930f                      push R16
+000062 951a                      dec counter			;decrement value
+000063 3011                      cpi counter, 1		
+000064 f040                      brlo zero			;if value counter lower than 1 go to zero
+000065 1712                      cp counter, R18
+000066 f418                      brsh off			;if value of register R18 higher or same go to off
+000067 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ;set Port as a input
+000068 b908                      out PORTC, R16
+000069 c004                      rjmp back
                                  off:
-000083 e000                      ldi R16, (0<<PINC1)|(0<<PINC2) ;set Port as a output
-000084 b908                      out PORTC, R16 
-000085 c001                      rjmp back
+00006a e000                      ldi R16, (0<<PINC1)|(0<<PINC2) ;set Port as a output
+00006b b908                      out PORTC, R16 
+00006c c001                      rjmp back
                                  zero:
-000086 ec18                      ldi counter, 200
+00006d ec18                      ldi counter, 200
                                  back:
-000087 910f                      pop R16
-000088 9518                      reti				;return from interrupt 
+00006e 910f                      pop R16
+00006f 9518                      reti				;return from interrupt 
                                  
+                                 ;---------------------------------------------------------
+                                 ;     Include external files
+                                 .INCLUDE "Delay.inc"	;Delay functions
+                                 
+                                  * Delay.inc
+                                  *
+                                  *  Created: 2018-07-12 17:32:43
+                                  *   Author: MO
+                                  */ 
+                                  ;---------------------------------------------------------
+                                 ;     Delay functions
+                                 ;	Delay in ms
+                                 delay_ms:
+000070 933f                      	push R19				;push values to stack
+000071 934f                      	push R20
+000072 935f                      	push R21
+000073 930f                      	push R16
+                                 
+000074 2f38                      	mov R19, DELAY_MUL		;copy value to register
+000075 2f49                      	mov R20, DELAY_TIME
+000076 e150                      	ldi R21, 16
+                                 
+                                 Wait_ms_0:				;_______________________
+000077 2f49                      	mov R20, DELAY_TIME ;			loop 0		\
+                                 Wait_ms_1:				;__________________		|
+000078 2f38                      	mov R19, DELAY_MUL  ;			loop 1	\	|
+                                 Wait_ms_2:				;_______________	|	|
+000079 ef09                      	ldi R16, 249		;		loop 2	\	|	|
+00007a 0000                      	nop					;				|	|	|
+                                 Wait_ms_3:				;______			|	|	|
+00007b 0000                      	nop					;loop 3	\		|	|	|
+00007c 950a                      	dec R16				;		/		|	|	|
+00007d f7e9                      	brne Wait_ms_3		;______/		|	|	|
+00007e 953a                          dec R19				;				/	|	|	
+00007f f7c9                      	brne Wait_ms_2		;______________/	|	|
+000080 954a                      	dec R20				;				   /	|
+000081 f7b1                      	brne Wait_ms_1		;_________________/		|
+000082 955a                      	dec R21				;						/
+000083 f799                      	brne Wait_ms_0		;______________________/
+                                 
+000084 910f                      	pop R16
+000085 915f                      	pop R21					;get values from stack 
+000086 914f                      	pop R20
+000087 913f                      	pop R19
+000088 9508                      ret
+                                 ; Delay in us
+                                 delay_us:
+000089 934f                      	push R20				;push values to stack
+00008a 935f                      	push R21
+                                 		
+00008b 2f49                      	mov R20, DELAY_TIME		;copy value to register
+00008c e150                      	ldi R21, 16
+                                 
+                                 Wait_us_0:				;_______________________
+00008d 2f49                      	mov R20, DELAY_TIME ;			loop 0		\
+                                 Wait_us_1:				;__________________		|
+00008e 0000                      	nop					;				   |	|
+00008f 0000                      	nop					;				   |	|
+000090 0000                      	nop					;				   |	|
+000091 0000                      	nop					;				   |	|
+000092 0000                      	nop					;				   |	|
+000093 0000                      	nop					;				   |	|
+000094 0000                      	nop					;			loop 1 |	|	
+000095 954a                      	dec R20				;				   /	|
+000096 f7b9                      	brne Wait_us_1		;_________________/		|
+000097 955a                      	dec R21				;						/
+000098 f7a1                      	brne Wait_us_0		;______________________/
+                                 			
+000099 915f                      	pop R21			;get values from stack 
+00009a 914f                      	pop R20
 
 
 RESOURCE USE INFORMATION
@@ -1329,8 +1352,8 @@ counted separately from r26..r31 here.
 "ATmega644P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  34 r17:   7 r18:   7 r19:   8 r20:   5 
-r21:   4 r22:   0 r23:   0 r24:   3 r25:   3 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  34 r17:   7 r18:   7 r19:   8 r20:  10 
+r21:   8 r22:   0 r23:   0 r24:   3 r25:   5 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 8 out of 35 (22.9%)
 
@@ -1339,16 +1362,16 @@ Registers used: 8 out of 35 (22.9%)
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
 brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :   4 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   6 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   2 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
-cpi   :   2 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+cpi   :   2 cpse  :   0 dec   :   7 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   1 jmp   :   2 
-ld    :   0 ldd   :   0 ldi   :  17 lds   :   5 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   6 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   4 or    :   0 ori   :   3 out   :   9 pop   :   5 
-push  :   5 rcall :   0 ret   :   1 reti  :   1 rjmp  :   5 rol   :   0 
+ld    :   0 ldd   :   0 ldi   :  18 lds   :   5 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :   8 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :  11 or    :   0 ori   :   3 out   :   9 pop   :   7 
+push  :   7 rcall :   0 ret   :   2 reti  :   1 rjmp  :   5 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   4 sbic  :   1 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
@@ -1359,7 +1382,7 @@ Instructions used: 25 out of 113 (22.1%)
 "ATmega644P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000112    214      0    214   65536   0.3%
+[.cseg] 0x000000 0x000138    252      0    252   65536   0.4%
 [.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    2048   0.0%
 
