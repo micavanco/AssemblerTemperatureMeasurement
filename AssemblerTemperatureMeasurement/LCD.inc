@@ -4,16 +4,6 @@
  *  Created: 2018-07-12 17:31:48
  *   Author: MO
  */ 
- ;-------------------------------------------
-;    Declaring constants for LCD driver
-.equ D_LCD	 = DDRA  ; register of direction LCD
-.equ O_LCD   = PORTA ; output port register of LCD
-.equ LCD_RS  = 0     ; number of RS  signal line
-.equ LCD_EN  = 1     ; number of E   signal line
-.equ LCD_DB4 = 4     ; number of DB4 signal line
-.equ LCD_DB5 = 5     ; number of DB5 signal line
-.equ LCD_DB6 = 6     ; number of DB6 signal line
-.equ LCD_DB7 = 7     ; number of DB7 signal line
  ;---------------------------------------------------------
  ;	Declaring labels for driver instructions
  .equ LCD_CLEAR		= 0 ; clear screen and cursor return
@@ -48,6 +38,87 @@
 
  .equ LCD_CGADR		= 6 ; change CGRAM address
  .equ LCD_DDADR		= 7 ; change DDRAM address
+
+;---------------------------------------------------------
+;     Function to initialize LCD screen
+
+Ini_LCD:
+	push DATA_TO_SEND		; put value on stack
+	push DELAY_MUL			; put value on stack
+	push DELAY_TIME
+
+	sbi D_LCD, LCD_RS		; set bit RS and so on
+	sbi D_LCD, LCD_EN
+	sbi D_LCD, LCD_DB4
+	sbi D_LCD, LCD_DB5
+	sbi D_LCD, LCD_DB6
+	sbi D_LCD, LCD_DB7
+
+	cbi O_LCD, LCD_RS		; clear bit RS and EN (send instructions)
+	cbi O_LCD, LCD_EN
+
+	ldi DELAY_TIME, 45
+	ldi DELAY_MUL, 1
+	rcall delay_ms			; wait 45 ms
+
+		
+	sbi O_LCD, LCD_EN    ; set bit E and so on
+	sbi O_LCD, LCD_DB4
+	sbi O_LCD, LCD_DB5
+	cbi O_LCD, LCD_DB6
+	cbi O_LCD, LCD_DB7
+	nop
+	nop
+	cbi O_LCD, LCD_EN
+
+	ldi DELAY_TIME, 5
+	ldi DELAY_MUL, 1
+	rcall delay_ms			; wait 5 ms
+
+	ldi DELAY_MUL, 2
+	Ini_LCD_1:
+	sbi O_LCD, LCD_EN
+	ldi DELAY_TIME, 1
+	rcall delay_us			; wait 1 us
+	cbi O_LCD, LCD_EN
+	ldi DELAY_TIME, 20
+	rcall delay_us			; wait 20 us
+	dec DELAY_MUL
+	brne Ini_LCD_1			; if not equal 0 move to Ini_LCD_1
+
+	sbi O_LCD, LCD_EN
+	cbi O_LCD, LCD_DB4
+	ldi DELAY_TIME, 1
+	rcall delay_us			; wait 1 us
+	cbi O_LCD, LCD_EN
+	ldi DELAY_TIME, 10
+	rcall delay_us			; wait 10 us
+
+	ldi DATA_TO_SEND, (1<<LCD_SET)|(1<<LCD_SET_4BIT)|(1<<LCD_SET_2LINE)|(1<<LCD_SET_5x8)
+	rcall instruction_LCD
+
+	ldi DATA_TO_SEND, (1<<LCD_MODE)|(1<<LCD_T_INC)
+	rcall instruction_LCD
+
+	ldi DATA_TO_SEND, (1<<LCD_CTRL)|(1<<LCD_SW_ON)|(1<<LCD_SK_ON)|(1<<LCD_SM_ON)
+	rcall instruction_LCD
+
+	sbi O_LCD, LCD_RS
+
+	rcall clear_LCD
+
+	pop DELAY_TIME
+	pop DELAY_MUL			; take value from stack
+	pop DATA_TO_SEND		; take value from stack
+	ret
+
+;---------------------------------------------------------
+;     Function to send instruction to LCD
+instruction_LCD:
+	cbi O_LCD, LCD_RS	;clear RS bit/sending values are instructions
+	rcall send_to_LCD
+	sbi O_LCD, LCD_RS	;set RS bit/sending values are data
+	ret
 
 ;---------------------------------------------------------
 ;     Function to send byte to LCD
@@ -95,19 +166,14 @@ send_to_LCD:
 	rcall delay_us
 ret
 
-;---------------------------------------------------------
-;     Function to send instruction to LCD
-instruction_LCD:
-	cbi O_LCD, LCD_RS	;clear RS bit/sending values are instructions
-	rcall send_to_LCD
-	sbi O_LCD, LCD_RS	;set RS bit/sending values are data
-	ret
+
 ;---------------------------------------------------------
 ;     Function to clear LCD screen
 clear_LCD:
 	push DATA_TO_SEND				; put value on stack
 	ldi DATA_TO_SEND, (1<<LCD_CLEAR)
 	rcall instruction_LCD			; clear screen and return cursor to first position
+
 	ldi DATA_TO_SEND, 180
 	rcall delay_us					; delay 1,8 ms
 	pop DATA_TO_SEND				; take value from stack
@@ -117,16 +183,18 @@ clear_LCD:
 ;     Function to return cursor on LCD screen
 return_cursor:
 	push DATA_TO_SEND				; put value on stack
+	push DELAY_TIME
 	ldi  DATA_TO_SEND, (1<<LCD_BACK); return cursor to first position
 	rcall instruction_LCD
-	ldi DATA_TO_SEND, 180
+	ldi DELAY_TIME, 180
 	rcall delay_us					; delay 1,8 ms
+	pop DELAY_TIME
 	pop DATA_TO_SEND				; take value from stack
 	ret
 
 ;---------------------------------------------------------
 ;     Function to display char string
-.equ END_OF_STRING = 0xFF		; label of end of string
+.equ END_OF_STRING = 255	; label of end of string
 
 display_string_LCD:
 	
@@ -197,3 +265,33 @@ show_dec_LCD:
 	pop R19					; take value from stack
 	pop DATA_TO_SEND		; take value from stack
 	ret	 
+
+;---------------------------------------------------------
+;     Function to add spaces to display 
+
+add_space_LCD:
+	push R19
+
+	mov R19, DATA_TO_SEND	; copy number of spaces
+
+	add_space_LCD_1:
+	ldi R19, ' '			; load ASCII "space" symbol
+	rcall send_to_LCD		; and display on LCD screen
+	dec R19
+	brne add_space_LCD_1	; if not equal to zero go to add_space_LCD_1
+
+	pop R19
+	ret
+
+;---------------------------------------------------------
+;     Function to copy constant values to CGRAM memory
+
+;save_to_CGRAM:
+	;push DATA_TO_SEND		; put value on stack
+	;push R19				; put value on stack
+														;*********in progress*************
+	;ldi DATA_TO_SEND, 0|(1<<LCD_CGADR)
+	;rcall instruction_LCD	; set CGADR address mode and set 0 address in that memory
+
+	;ldi 
+
