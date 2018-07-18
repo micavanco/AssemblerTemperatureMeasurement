@@ -1,14 +1,16 @@
 
-AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Tue Jul 17 17:57:59 2018
+AVRASM ver. 2.2.6  C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm Wed Jul 18 19:09:13 2018
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644pdef.inc'
 C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(7): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644Pdef.inc'
-C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(138): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc'
-C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(139): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(48): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(49): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(50): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644pdef.inc'
 C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(7): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644Pdef.inc'
-C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(138): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc'
-C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(139): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(48): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(49): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc'
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(50): Including file 'C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc'
                                  
                                  ;
                                  
@@ -1207,7 +1209,7 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-                                  ;-------------------------------------------
+                                 ;-------------------------------------------
                                  ;    Declaring constants for LCD driver
                                  .EQU D_LCD	 = DDRA  ; register of direction LCD
                                  .EQU O_LCD   = PORTA ; output port register of LCD
@@ -1218,129 +1220,32 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  .EQU LCD_DB6 = 6     ; number of DB6 signal line
                                  .EQU LCD_DB7 = 7     ; number of DB7 signal line
                                  
+                                 ;-------------------------------------------
+                                 ;    Declaring constants for DS18B20 driver
+                                 .EQU D_TEMP	 = DDRD  ; register of direction DS18B20
+                                 .EQU O_TEMP  = PORTD ; output port register of DS18B20
+                                 .EQU TEMP_DQ = PD6   ; number of DQ data line
+                                 .EQU TEMP_PIN= PIND
                                  
-                                 .DEF DATA_TO_SEND=R16
-                                 .DEF DELAY_TIME=R17
-                                 .DEF DELAY_MUL=R18
-                                 .DEF RED_LED=R23	; defining variables
-                                 .DEF GREEN_LED=R20
-                                 .DEF BLUE_LED=R21
-                                 .DEF counter=R22
+                                 
+                                 .DEF DATA_TO_SEND = R16
+                                 .DEF DELAY_TIME   = R17
+                                 .DEF DELAY_MUL    = R18
+                                 .DEF RED_LED      = R23			; defining variables
+                                 .DEF GREEN_LED    = R20
+                                 .DEF BLUE_LED     = R21
+                                 .DEF counter      = R22
+                                 
+                                 .DSEG
+                                 .ORG 0x100
+000100                           	_crc:			.BYTE 1
+000101                           	SerialNumber:	.BYTE 8
                                  
                                  .CSEG 
-000000 940c 0037                 .org 0 jmp start
-000020 940c 007c                 .org OC0Aaddr jmp Tim0_compA  ; Overflow0 Interrupt Vector Address
-                                 .org 0x30			 ; jump to first section after interrupt vectors
+000000 940c 0166                 .org 0 jmp start
+000020 940c 01d7                 .org OC0Aaddr jmp Tim0_compA  ; Overflow0 Interrupt Vector Address
+                                 .org 0x30					  ; jump to first section after interrupt vectors
                                  
-                                 
-000030 6554
-000031 706d
-000032 7265
-000033 7461
-000034 7275
-000035 2065
-C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(35): warning: .cseg .db misalignment - padding zero byte
-000036 00ff                      Text:	.db "Temperature ", END_OF_STRING ; declaring const string in program memory
-                                 
-                                 start:
-000037 94f8                      cli					; disable interrupts 
-                                 
-000038 ec68                      ldi counter, 200
-000039 e072                      ldi RED_LED, 2	
-00003a e022                      ldi DELAY_MUL, 2
-00003b e015                      ldi DELAY_TIME, 5	
-                                 
-00003c e110                      ldi R17, high(RAMEND) ; initialization of stack pointer
-00003d ef0f                      ldi R16, low(RAMEND)
-00003e bf1e                      out SPH, R17
-00003f bf0d                      out SPL, R16
-                                 
-000040 d076                      rcall Ini_LCD		; initialization of LCD
-                                 
-000041 e0f0                      ldi ZH, high(Text<<1)	; load address of first character to pointer
-000042 e6e0                      ldi ZL, low(Text<<1)
-000043 d0df                      rcall display_string_LCD
-                                 
-000044 2700                      clr R16
-000045 9100 00b0                 lds R16, TCCR2A		; load address of TCCR2A to R16
-000047 6c03                      ORI R16, (1<<COM2A1)|(1<<COM2A0)|(1<<WGM20)|(1<<WGM21) ; load data to R16 (logical OR operation), set OC2A on Compare Match, clear OC2A at BOTTOM (inverting mode) fastPWM
-000048 9300 00b0                 sts TCCR2A, R16		; store direct to data space I/O from R16
-                                 
-00004a 9100 00b1                 lds R16, TCCR2B		; load address of TCCR2B to R16
-00004c 6001                      ORI R16, (1<<CS20)	; load to R16 data (logical OR operation), set (No prescaling)
-00004d 9300 00b1                 sts TCCR2B, R16		; store direct to data space I/O from R16
-                                 
-00004f 9100 00b3                 lds R16, OCR2A		; load address of OCR2A to R16
-000051 2f07                      mov R16, RED_LED	; load value to R16
-000052 9300 00b3                 sts OCR2A, R16		; store direct to data space from R16
-                                 
-000054 ec02                      ldi R16, (1<<COM0A1)|(1<<COM0A0)|(1<<WGM01) ; set compare output mode, clear OC0A at BOTTOM (inverting mode) CTC
-000055 bd04                      out TCCR0A, R16
-000056 e002                      ldi R16, (1<<CS01)	; set /8 (From prescaler)
-000057 bd05                      out TCCR0B, R16
-000058 ec08                      ldi R16, 200
-000059 bd07                      out OCR0A, R16
-00005a 9100 006e                 lds R16, TIMSK0		; load address of TIMSK0 to R16
-00005c 6002                      ORI R16, (1<<OCIE0A); load to R16 data (logical OR operation), set interrupt on compare enable
-00005d 9300 006e                 sts TIMSK0, R16		; store direct to data space from R16
-                                 
-                                 ;sbi DDRC, DDC2		; set Data Direct Register as a input
-                                 ;sbi DDRC, DDC1		; set Data Direct Register as a input
-                                 ;sbi DDRD, DDD7
-00005f 9a50                      sbi DDRD, (0<<DDD6) ; set Data Direct Register as a output (connected button)
-                                 
-000060 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ; set Port as a output
-000061 b908                      out PORTC, R16 
-000062 e400                      ldi R16, (0<<PIND7)|(1<<PIND6) ; pull-up internal resistor in PIND6
-000063 b90b                      out PORTD, R16 
-000064 9478                      sei					; enable interrupts 
-                                 
-                                 ;*************************************************
-                                 main:				; main loop
-000065 994e                      sbic PIND, PIND6	; wait for pushed button (if PIND6 is clear, skip next instruction)
-000066 cffe                      rjmp main
-000067 0000                      nop
-000068 9573                      inc RED_LED			; increment value
-000069 3f7c                      cpi	RED_LED, 252	; if R18 equals or higher 252 do next command
-00006a f458                      brsh toone
-00006b 9180 00b3                 lds R24, OCR2A		; load address of OCR2A to R16
-00006d 2f87                      mov R24, RED_LED	; load value to R16
-00006e 9380 00b3                 sts OCR2A, R24		; store direct to data space from R16
-000070 0000                      nop 
-000071 e114                      ldi DELAY_TIME, 20
-000072 e021                      ldi DELAY_MUL, 1
-000073 940e 008b                 call delay_ms
-000075 cfef                      rjmp main
-                                 toone: 
-000076 e071                      ldi RED_LED, 1
-000077 e01f                      ldi DELAY_TIME, 15
-000078 e021                      ldi DELAY_MUL, 1
-000079 940e 008b                 call delay_ms
-00007b cfe9                      rjmp main
-                                 ;*************************************************		
-                                 
-                                 ;---------------------------------------------------------
-                                 ;     Interrupt functions
-                                 
-                                 Tim0_compA:
-00007c 932f                      push R18
-00007d 956a                      dec counter			; decrement value
-00007e 3061                      cpi counter, 1		
-00007f f040                      brlo zero			; if value counter lower than 1 go to zero
-000080 1767                      cp counter, RED_LED
-000081 f418                      brsh off			; if value of register R18 higher or same go to off
-000082 e026                      ldi R18, (1<<PINC1)|(1<<PINC2) ;set Port as a input
-000083 b928                      out PORTC, R18
-000084 c004                      rjmp back
-                                 off:
-000085 e020                      ldi R18, (0<<PINC1)|(0<<PINC2) ; set Port as a output
-000086 b928                      out PORTC, R18 
-000087 c001                      rjmp back
-                                 zero:
-000088 ec68                      ldi counter, 200
-                                 back:
-000089 912f                      pop R18
-00008a 9518                      reti				; return from interrupt 
                                  ;---------------------------------------------------------
                                  ;     Include external files
                                  .INCLUDE "Delay.inc"	; Delay functions
@@ -1354,65 +1259,65 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  ;     Delay functions
                                  ;	Delay in ms
                                  delay_ms:
-00008b 933f                      	push R19				;push values to stack
-00008c 934f                      	push R20
-00008d 935f                      	push R21
-00008e 936f                      	push R22
+000030 933f                      	push R19				;push values to stack
+000031 934f                      	push R20
+000032 935f                      	push R21
+000033 936f                      	push R22
                                  
-00008f 2f32                      	mov R19, DELAY_MUL		;copy value to register
-000090 2f41                      	mov R20, DELAY_TIME
-000091 e150                      	ldi R21, 16
+000034 2f32                      	mov R19, DELAY_MUL		;copy value to register
+000035 2f41                      	mov R20, DELAY_TIME
+000036 e150                      	ldi R21, 16
                                  
                                  Wait_ms_0:				;_______________________
-000092 2f23                      	mov DELAY_MUL, R19	;			loop 0		\
+000037 2f23                      	mov DELAY_MUL, R19	;			loop 0		\
                                  Wait_ms_1:				;__________________		|
-000093 2f14                      	mov DELAY_TIME, R20 ;			loop 1	\	|
+000038 2f14                      	mov DELAY_TIME, R20 ;			loop 1	\	|
                                  Wait_ms_2:				;_______________	|	|
-000094 ef69                      	ldi R22, 249		;		loop 2	\	|	|
-000095 0000                      	nop					;				|	|	|
+000039 ef69                      	ldi R22, 249		;		loop 2	\	|	|
+00003a 0000                      	nop					;				|	|	|
                                  Wait_ms_3:				;______			|	|	|
-000096 0000                      	nop					;loop 3	\		|	|	|
-000097 956a                      	dec R22				;		/		|	|	|
-000098 f7e9                      	brne Wait_ms_3		;______/		|	|	|
-000099 951a                          dec DELAY_TIME		;				/	|	|	
-00009a f7c9                      	brne Wait_ms_2		;______________/	|	|
-00009b 952a                      	dec DELAY_MUL		;				   /	|
-00009c f7b1                      	brne Wait_ms_1		;_________________/		|
-00009d 955a                      	dec R21				;						/
-00009e f799                      	brne Wait_ms_0		;______________________/
+00003b 0000                      	nop					;loop 3	\		|	|	|
+00003c 956a                      	dec R22				;		/		|	|	|
+00003d f7e9                      	brne Wait_ms_3		;______/		|	|	|
+00003e 951a                          dec DELAY_TIME		;				/	|	|	
+00003f f7c9                      	brne Wait_ms_2		;______________/	|	|
+000040 952a                      	dec DELAY_MUL		;				   /	|
+000041 f7b1                      	brne Wait_ms_1		;_________________/		|
+000042 955a                      	dec R21				;						/
+000043 f799                      	brne Wait_ms_0		;______________________/
                                  
-00009f 916f                      	pop R22
-0000a0 915f                      	pop R21					;get values from stack 
-0000a1 914f                      	pop R20
-0000a2 913f                      	pop R19
-0000a3 9508                      ret
+000044 916f                      	pop R22
+000045 915f                      	pop R21					;get values from stack 
+000046 914f                      	pop R20
+000047 913f                      	pop R19
+000048 9508                      ret
                                  ; Delay in us
                                  delay_us:
-0000a4 934f                      	push R20				;push values to stack
-0000a5 935f                      	push R21
+000049 934f                      	push R20				;push values to stack
+00004a 935f                      	push R21
                                  		
-0000a6 2f41                      	mov R20, DELAY_TIME		;copy value to register
-0000a7 e150                      	ldi R21, 16
+00004b 2f41                      	mov R20, DELAY_TIME		;copy value to register
+00004c e150                      	ldi R21, 16
                                  
                                  Wait_us_0:				;_______________________
-0000a8 2f14                      	mov DELAY_TIME, R20 ;			loop 0		\
+00004d 2f14                      	mov DELAY_TIME, R20 ;			loop 0		\
                                  Wait_us_1:				;__________________		|
-0000a9 0000                      	nop					;				   |	|
-0000aa 0000                      	nop					;				   |	|
-0000ab 0000                      	nop					;				   |	|
-0000ac 0000                      	nop					;				   |	|
-0000ad 0000                      	nop					;				   |	|
-0000ae 0000                      	nop					;				   |	|
-0000af 0000                      	nop					;			loop 1 |	|	
-0000b0 951a                      	dec DELAY_TIME		;				   /	|
-0000b1 f7b9                      	brne Wait_us_1		;_________________/		|
-0000b2 955a                      	dec R21				;						/
-0000b3 f7a1                      	brne Wait_us_0		;______________________/
+00004e 0000                      	nop					;				   |	|
+00004f 0000                      	nop					;				   |	|
+000050 0000                      	nop					;				   |	|
+000051 0000                      	nop					;				   |	|
+000052 0000                      	nop					;				   |	|
+000053 0000                      	nop					;				   |	|
+000054 0000                      	nop					;			loop 1 |	|	
+000055 951a                      	dec DELAY_TIME		;				   /	|
+000056 f7b9                      	brne Wait_us_1		;_________________/		|
+000057 955a                      	dec R21				;						/
+000058 f7a1                      	brne Wait_us_0		;______________________/
                                  			
-0000b4 915f                      	pop R21			;get values from stack 
-0000b5 914f                      	pop R20
+000059 915f                      	pop R21			;get values from stack 
+00005a 914f                      	pop R20
                                  .INCLUDE "LCD.inc"		; LCD functions
-0000b6 9508                      
+00005b 9508                      
                                   * LCD.inc
                                   *
                                   *  Created: 2018-07-12 17:31:48
@@ -1457,154 +1362,154 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  ;     Function to initialize LCD screen
                                  
                                  Ini_LCD:
-0000b7 930f                      	push DATA_TO_SEND		; put value on stack
-0000b8 932f                      	push DELAY_MUL			; put value on stack
-0000b9 931f                      	push DELAY_TIME
+00005c 930f                      	push DATA_TO_SEND		; put value on stack
+00005d 932f                      	push DELAY_MUL			; put value on stack
+00005e 931f                      	push DELAY_TIME
                                  
-0000ba 9a08                      	sbi D_LCD, LCD_RS		; set bit RS and so on
-0000bb 9a09                      	sbi D_LCD, LCD_EN
-0000bc 9a0c                      	sbi D_LCD, LCD_DB4
-0000bd 9a0d                      	sbi D_LCD, LCD_DB5
-0000be 9a0e                      	sbi D_LCD, LCD_DB6
-0000bf 9a0f                      	sbi D_LCD, LCD_DB7
+00005f 9a08                      	sbi D_LCD, LCD_RS		; set bit RS and so on
+000060 9a09                      	sbi D_LCD, LCD_EN
+000061 9a0c                      	sbi D_LCD, LCD_DB4
+000062 9a0d                      	sbi D_LCD, LCD_DB5
+000063 9a0e                      	sbi D_LCD, LCD_DB6
+000064 9a0f                      	sbi D_LCD, LCD_DB7
                                  
-0000c0 9810                      	cbi O_LCD, LCD_RS		; clear bit RS and EN (send instructions)
-0000c1 9811                      	cbi O_LCD, LCD_EN
+000065 9810                      	cbi O_LCD, LCD_RS		; clear bit RS and EN (send instructions)
+000066 9811                      	cbi O_LCD, LCD_EN
                                  
-0000c2 e21d                      	ldi DELAY_TIME, 45
-0000c3 e021                      	ldi DELAY_MUL, 1
-0000c4 dfc6                      	rcall delay_ms			; wait 45 ms
+000067 e21d                      	ldi DELAY_TIME, 45
+000068 e021                      	ldi DELAY_MUL, 1
+000069 dfc6                      	rcall delay_ms			; wait 45 ms
                                  
                                  		
-0000c5 9a11                      	sbi O_LCD, LCD_EN    ; set bit E and so on
-0000c6 9a14                      	sbi O_LCD, LCD_DB4
-0000c7 9a15                      	sbi O_LCD, LCD_DB5
-0000c8 9816                      	cbi O_LCD, LCD_DB6
-0000c9 9817                      	cbi O_LCD, LCD_DB7
-0000ca 0000                      	nop
-0000cb 0000                      	nop
-0000cc 9811                      	cbi O_LCD, LCD_EN
+00006a 9a11                      	sbi O_LCD, LCD_EN    ; set bit E and so on
+00006b 9a14                      	sbi O_LCD, LCD_DB4
+00006c 9a15                      	sbi O_LCD, LCD_DB5
+00006d 9816                      	cbi O_LCD, LCD_DB6
+00006e 9817                      	cbi O_LCD, LCD_DB7
+00006f 0000                      	nop
+000070 0000                      	nop
+000071 9811                      	cbi O_LCD, LCD_EN
                                  
-0000cd e015                      	ldi DELAY_TIME, 5
-0000ce e021                      	ldi DELAY_MUL, 1
-0000cf dfbb                      	rcall delay_ms			; wait 5 ms
+000072 e015                      	ldi DELAY_TIME, 5
+000073 e021                      	ldi DELAY_MUL, 1
+000074 dfbb                      	rcall delay_ms			; wait 5 ms
                                  
-0000d0 e022                      	ldi DELAY_MUL, 2
+000075 e022                      	ldi DELAY_MUL, 2
                                  	Ini_LCD_1:
-0000d1 9a11                      	sbi O_LCD, LCD_EN
-0000d2 e011                      	ldi DELAY_TIME, 1
-0000d3 dfd0                      	rcall delay_us			; wait 1 us
-0000d4 9811                      	cbi O_LCD, LCD_EN
-0000d5 e114                      	ldi DELAY_TIME, 20
-0000d6 dfcd                      	rcall delay_us			; wait 20 us
-0000d7 952a                      	dec DELAY_MUL
-0000d8 f7c1                      	brne Ini_LCD_1			; if not equal 0 move to Ini_LCD_1
+000076 9a11                      	sbi O_LCD, LCD_EN
+000077 e011                      	ldi DELAY_TIME, 1
+000078 dfd0                      	rcall delay_us			; wait 1 us
+000079 9811                      	cbi O_LCD, LCD_EN
+00007a e114                      	ldi DELAY_TIME, 20
+00007b dfcd                      	rcall delay_us			; wait 20 us
+00007c 952a                      	dec DELAY_MUL
+00007d f7c1                      	brne Ini_LCD_1			; if not equal 0 move to Ini_LCD_1
                                  
-0000d9 9a11                      	sbi O_LCD, LCD_EN
-0000da 9814                      	cbi O_LCD, LCD_DB4
-0000db e011                      	ldi DELAY_TIME, 1
-0000dc dfc7                      	rcall delay_us			; wait 1 us
-0000dd 9811                      	cbi O_LCD, LCD_EN
-0000de e01a                      	ldi DELAY_TIME, 10
-0000df dfc4                      	rcall delay_us			; wait 10 us
+00007e 9a11                      	sbi O_LCD, LCD_EN
+00007f 9814                      	cbi O_LCD, LCD_DB4
+000080 e011                      	ldi DELAY_TIME, 1
+000081 dfc7                      	rcall delay_us			; wait 1 us
+000082 9811                      	cbi O_LCD, LCD_EN
+000083 e01a                      	ldi DELAY_TIME, 10
+000084 dfc4                      	rcall delay_us			; wait 10 us
                                  
-0000e0 e208                      	ldi DATA_TO_SEND, (1<<LCD_SET)|(1<<LCD_SET_4BIT)|(1<<LCD_SET_2LINE)|(1<<LCD_SET_5x8)
-0000e1 d00a                      	rcall instruction_LCD
+000085 e208                      	ldi DATA_TO_SEND, (1<<LCD_SET)|(1<<LCD_SET_4BIT)|(1<<LCD_SET_2LINE)|(1<<LCD_SET_5x8)
+000086 d00a                      	rcall instruction_LCD
                                  
-0000e2 e006                      	ldi DATA_TO_SEND, (1<<LCD_MODE)|(1<<LCD_T_INC)
-0000e3 d008                      	rcall instruction_LCD
+000087 e006                      	ldi DATA_TO_SEND, (1<<LCD_MODE)|(1<<LCD_T_INC)
+000088 d008                      	rcall instruction_LCD
                                  
-0000e4 e00f                      	ldi DATA_TO_SEND, (1<<LCD_CTRL)|(1<<LCD_SW_ON)|(1<<LCD_SK_ON)|(1<<LCD_SM_ON)
-0000e5 d006                      	rcall instruction_LCD
+000089 e00c                      	ldi DATA_TO_SEND, (1<<LCD_CTRL)|(1<<LCD_SW_ON)|(1<<LCD_SK_OFF)|(1<<LCD_SM_OFF)
+00008a d006                      	rcall instruction_LCD
                                  
-0000e6 9a10                      	sbi O_LCD, LCD_RS
+00008b 9a10                      	sbi O_LCD, LCD_RS
                                  
-0000e7 d02b                      	rcall clear_LCD
+00008c d02b                      	rcall clear_LCD
                                  
-0000e8 911f                      	pop DELAY_TIME
-0000e9 912f                      	pop DELAY_MUL			; take value from stack
-0000ea 910f                      	pop DATA_TO_SEND		; take value from stack
-0000eb 9508                      	ret
+00008d 911f                      	pop DELAY_TIME
+00008e 912f                      	pop DELAY_MUL			; take value from stack
+00008f 910f                      	pop DATA_TO_SEND		; take value from stack
+000090 9508                      	ret
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to send instruction to LCD
                                  instruction_LCD:
-0000ec 9810                      	cbi O_LCD, LCD_RS	;clear RS bit/sending values are instructions
-0000ed d002                      	rcall send_to_LCD
-0000ee 9a10                      	sbi O_LCD, LCD_RS	;set RS bit/sending values are data
-0000ef 9508                      	ret
+000091 9810                      	cbi O_LCD, LCD_RS	;clear RS bit/sending values are instructions
+000092 d002                      	rcall send_to_LCD
+000093 9a10                      	sbi O_LCD, LCD_RS	;set RS bit/sending values are data
+000094 9508                      	ret
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to send byte to LCD
                                  send_to_LCD:
-0000f0 9a11                      	sbi O_LCD, LCD_EN	;set bit EN
-0000f1 9814                      	cbi	O_LCD, LCD_DB4	;clear bit DB4
-0000f2 9815                      	cbi	O_LCD, LCD_DB5
-0000f3 9816                      	cbi	O_LCD, LCD_DB6
-0000f4 9817                      	cbi	O_LCD, LCD_DB7
-0000f5 fd07                      	sbrc DATA_TO_SEND, 7
-0000f6 9a17                      	sbi	O_LCD, LCD_DB7	;do this instruction if bit 7 is set
-0000f7 fd06                      	sbrc DATA_TO_SEND, 6
-0000f8 9a16                      	sbi	O_LCD, LCD_DB6	;do this instruction if bit 6 is set
-0000f9 fd05                      	sbrc DATA_TO_SEND, 5
-0000fa 9a15                      	sbi	O_LCD, LCD_DB5	;do this instruction if bit 5 is set
-0000fb fd04                      	sbrc DATA_TO_SEND, 4
-0000fc 9a14                      	sbi	O_LCD, LCD_DB4	;do this instruction if bit 4 is set
+000095 9a11                      	sbi O_LCD, LCD_EN	;set bit EN
+000096 9814                      	cbi	O_LCD, LCD_DB4	;clear bit DB4
+000097 9815                      	cbi	O_LCD, LCD_DB5
+000098 9816                      	cbi	O_LCD, LCD_DB6
+000099 9817                      	cbi	O_LCD, LCD_DB7
+00009a fd07                      	sbrc DATA_TO_SEND, 7
+00009b 9a17                      	sbi	O_LCD, LCD_DB7	;do this instruction if bit 7 is set
+00009c fd06                      	sbrc DATA_TO_SEND, 6
+00009d 9a16                      	sbi	O_LCD, LCD_DB6	;do this instruction if bit 6 is set
+00009e fd05                      	sbrc DATA_TO_SEND, 5
+00009f 9a15                      	sbi	O_LCD, LCD_DB5	;do this instruction if bit 5 is set
+0000a0 fd04                      	sbrc DATA_TO_SEND, 4
+0000a1 9a14                      	sbi	O_LCD, LCD_DB4	;do this instruction if bit 4 is set
                                  
-0000fd 0000                      	nop
+0000a2 0000                      	nop
                                  
-0000fe 9811                      	cbi O_LCD, LCD_EN	;set EN to low - send first half byte
+0000a3 9811                      	cbi O_LCD, LCD_EN	;set EN to low - send first half byte
                                  
-0000ff 0000                      	nop
-000100 0000                      	nop
+0000a4 0000                      	nop
+0000a5 0000                      	nop
                                  
-000101 9a11                      	sbi O_LCD, LCD_EN	;set bit EN
-000102 9814                      	cbi	O_LCD, LCD_DB4	;clear bit DB4
-000103 9815                      	cbi	O_LCD, LCD_DB5
-000104 9816                      	cbi	O_LCD, LCD_DB6
-000105 9817                      	cbi	O_LCD, LCD_DB7
-000106 fd03                      	sbrc DATA_TO_SEND, 3
-000107 9a17                      	sbi	O_LCD, LCD_DB7	;do this instruction if bit 7 is set
-000108 fd02                      	sbrc DATA_TO_SEND, 2
-000109 9a16                      	sbi	O_LCD, LCD_DB6	;do this instruction if bit 6 is set
-00010a fd01                      	sbrc DATA_TO_SEND, 1
-00010b 9a15                      	sbi	O_LCD, LCD_DB5	;do this instruction if bit 5 is set
-00010c fd00                      	sbrc DATA_TO_SEND, 0
-00010d 9a14                      	sbi	O_LCD, LCD_DB4	;do this instruction if bit 4 is set
+0000a6 9a11                      	sbi O_LCD, LCD_EN	;set bit EN
+0000a7 9814                      	cbi	O_LCD, LCD_DB4	;clear bit DB4
+0000a8 9815                      	cbi	O_LCD, LCD_DB5
+0000a9 9816                      	cbi	O_LCD, LCD_DB6
+0000aa 9817                      	cbi	O_LCD, LCD_DB7
+0000ab fd03                      	sbrc DATA_TO_SEND, 3
+0000ac 9a17                      	sbi	O_LCD, LCD_DB7	;do this instruction if bit 7 is set
+0000ad fd02                      	sbrc DATA_TO_SEND, 2
+0000ae 9a16                      	sbi	O_LCD, LCD_DB6	;do this instruction if bit 6 is set
+0000af fd01                      	sbrc DATA_TO_SEND, 1
+0000b0 9a15                      	sbi	O_LCD, LCD_DB5	;do this instruction if bit 5 is set
+0000b1 fd00                      	sbrc DATA_TO_SEND, 0
+0000b2 9a14                      	sbi	O_LCD, LCD_DB4	;do this instruction if bit 4 is set
                                  
-00010e 0000                      	nop
+0000b3 0000                      	nop
                                  
-00010f 9811                      	cbi O_LCD, LCD_EN	;set EN to low - send second half byte
+0000b4 9811                      	cbi O_LCD, LCD_EN	;set EN to low - send second half byte
                                  
-000110 e015                      	ldi DELAY_TIME, 5	;set delay time to 5us
-000111 df92                      	rcall delay_us
-000112 9508                      ret
+0000b5 e015                      	ldi DELAY_TIME, 5	;set delay time to 5us
+0000b6 df92                      	rcall delay_us
+0000b7 9508                      ret
                                  
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to clear LCD screen
                                  clear_LCD:
-000113 930f                      	push DATA_TO_SEND				; put value on stack
-000114 e001                      	ldi DATA_TO_SEND, (1<<LCD_CLEAR)
-000115 dfd6                      	rcall instruction_LCD			; clear screen and return cursor to first position
+0000b8 930f                      	push DATA_TO_SEND				; put value on stack
+0000b9 e001                      	ldi DATA_TO_SEND, (1<<LCD_CLEAR)
+0000ba dfd6                      	rcall instruction_LCD			; clear screen and return cursor to first position
                                  
-000116 eb04                      	ldi DATA_TO_SEND, 180
-000117 df8c                      	rcall delay_us					; delay 1,8 ms
-000118 910f                      	pop DATA_TO_SEND				; take value from stack
-000119 9508                      	ret
+0000bb eb04                      	ldi DATA_TO_SEND, 180
+0000bc df8c                      	rcall delay_us					; delay 1,8 ms
+0000bd 910f                      	pop DATA_TO_SEND				; take value from stack
+0000be 9508                      	ret
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to return cursor on LCD screen
                                  return_cursor:
-00011a 930f                      	push DATA_TO_SEND				; put value on stack
-00011b 931f                      	push DELAY_TIME
-00011c e002                      	ldi  DATA_TO_SEND, (1<<LCD_BACK); return cursor to first position
-00011d dfce                      	rcall instruction_LCD
-00011e eb14                      	ldi DELAY_TIME, 180
-00011f df84                      	rcall delay_us					; delay 1,8 ms
-000120 911f                      	pop DELAY_TIME
-000121 910f                      	pop DATA_TO_SEND				; take value from stack
-000122 9508                      	ret
+0000bf 930f                      	push DATA_TO_SEND				; put value on stack
+0000c0 931f                      	push DELAY_TIME
+0000c1 e002                      	ldi  DATA_TO_SEND, (1<<LCD_BACK); return cursor to first position
+0000c2 dfce                      	rcall instruction_LCD
+0000c3 eb14                      	ldi DELAY_TIME, 180
+0000c4 df84                      	rcall delay_us					; delay 1,8 ms
+0000c5 911f                      	pop DELAY_TIME
+0000c6 910f                      	pop DATA_TO_SEND				; take value from stack
+0000c7 9508                      	ret
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to display char string
@@ -1612,90 +1517,88 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  
                                  display_string_LCD:
                                  	
-000123 930f                      	push DATA_TO_SEND		; put value on stack
-000124 933f                      	push R19				; put value on stack
+0000c8 930f                      	push DATA_TO_SEND		; put value on stack
+0000c9 933f                      	push R19				; put value on stack
                                  
                                  	loop_dsp_1:
-000125 9105                      	lpm DATA_TO_SEND, Z+	; load data from address pointer Z and increment address
+0000ca 9105                      	lpm DATA_TO_SEND, Z+	; load data from address pointer Z and increment address
                                  
-000126 3f0f                      	cpi DATA_TO_SEND, END_OF_STRING
-000127 f011                      	breq end_dsp_loop			; if this mark is END_OF_STRING mark, end loop
-000128 dfc7                      	rcall send_to_LCD
-000129 cffb                      	rjmp loop_dsp_1
+0000cb 3f0f                      	cpi DATA_TO_SEND, END_OF_STRING
+0000cc f011                      	breq end_dsp_loop			; if this mark is END_OF_STRING mark, end loop
+0000cd dfc7                      	rcall send_to_LCD
+0000ce cffb                      	rjmp loop_dsp_1
                                  
                                  	end_dsp_loop:
-00012a 913f                      	pop R19					; take value from stack
-00012b 910f                      	pop DATA_TO_SEND		; take value from stack
-00012c 9508                      	ret
+0000cf 913f                      	pop R19					; take value from stack
+0000d0 910f                      	pop DATA_TO_SEND		; take value from stack
+0000d1 9508                      	ret
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to display decimal number
                                  
                                  show_dec_LCD:
-00012d 930f                      	push DATA_TO_SEND		; put value on stack
-00012e 933f                      	push R19				; put value on stack
+0000d2 933f                      	push R19				; put value on stack
                                  
-00012f 2f30                      	mov R19, DATA_TO_SEND
-000130 94e8                      	clt						; clear bit register T 
+0000d3 2f30                      	mov R19, DATA_TO_SEND
+0000d4 94e8                      	clt						; clear bit register T 
                                  
-000131 2700                      	clr DATA_TO_SEND		; clear register
+0000d5 2700                      	clr DATA_TO_SEND		; clear register
                                  	loop_show_1:
-000132 5634                      	subi R19, 100			; subtract 100
-000133 f010                      	brlo loop_show_2		; branch if value is than zero
-000134 9503                      	inc DATA_TO_SEND
-000135 cffc                      	rjmp loop_show_1
+0000d6 5634                      	subi R19, 100			; subtract 100
+0000d7 f010                      	brlo loop_show_2		; branch if value is than zero
+0000d8 9503                      	inc DATA_TO_SEND
+0000d9 cffc                      	rjmp loop_show_1
                                  
                                  	loop_show_2:
-000136 593c                      	subi R19, -100			; add 100
-000137 2300                      	tst DATA_TO_SEND
-000138 f021                      	breq loop_show_3
-000139 9468                      	set						; if DATA_TO_SEND is higher than 0, set bit register T 
-00013a 6300                      	ori DATA_TO_SEND, 0b00110000 ; convert to ASCII
-00013b dfb4                      	rcall send_to_LCD		; and display on LCD screen
+0000da 593c                      	subi R19, -100			; add 100
+0000db 2300                      	tst DATA_TO_SEND
+0000dc f021                      	breq loop_show_3
+0000dd 9468                      	set						; if DATA_TO_SEND is higher than 0, set bit register T 
+0000de 6300                      	ori DATA_TO_SEND, 0b00110000 ; convert to ASCII
+0000df dfb5                      	rcall send_to_LCD		; and display on LCD screen
                                  	
-00013c 2700                      	clr DATA_TO_SEND
+0000e0 2700                      	clr DATA_TO_SEND
                                  	loop_show_3:
-00013d 503a                      	subi R19, 10
-00013e f010                      	brlo loop_show_4
-00013f 9503                      	inc DATA_TO_SEND
-000140 cffc                      	rjmp loop_show_3
+0000e1 503a                      	subi R19, 10
+0000e2 f010                      	brlo loop_show_4
+0000e3 9503                      	inc DATA_TO_SEND
+0000e4 cffc                      	rjmp loop_show_3
                                  
                                  	loop_show_4:
-000141 5f36                      	subi R19, -10
-000142 2300                      	tst DATA_TO_SEND
-000143 f409                      	brne loop_show_5		; if number of tens is equal to zero go to loop_show_5
-000144 f419                      	brne loop_show_6		; if bit register T was clear
+0000e5 5f36                      	subi R19, -10
+0000e6 2300                      	tst DATA_TO_SEND
+0000e7 f409                      	brne loop_show_5		; if number of tens is equal to zero go to loop_show_5
+0000e8 f419                      	brne loop_show_6		; if bit register T was clear
                                  
                                  	loop_show_5:
-000145 9468                      	set
-000146 6300                      	ori DATA_TO_SEND, 0b00110000 ; convert to ASCII
-000147 dfa8                      	rcall send_to_LCD		; and display on LCD screen
+0000e9 9468                      	set
+0000ea 6300                      	ori DATA_TO_SEND, 0b00110000 ; convert to ASCII
+0000eb dfa9                      	rcall send_to_LCD		; and display on LCD screen
                                  
                                  	loop_show_6:
-000148 2f03                      	mov DATA_TO_SEND, R19
-000149 6300                      	ori DATA_TO_SEND, 0b00110000 ; convert to ASCII
-00014a dfa5                      	rcall send_to_LCD		; and display on LCD screen
+0000ec 2f03                      	mov DATA_TO_SEND, R19
+0000ed 6300                      	ori DATA_TO_SEND, 0b00110000 ; convert to ASCII
+0000ee dfa6                      	rcall send_to_LCD		; and display on LCD screen
                                  
-00014b 913f                      	pop R19					; take value from stack
-00014c 910f                      	pop DATA_TO_SEND		; take value from stack
-00014d 9508                      	ret	 
+0000ef 913f                      	pop R19					; take value from stack
+0000f0 9508                      	ret	 
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to add spaces to display 
                                  
                                  add_space_LCD:
-00014e 933f                      	push R19
+0000f1 933f                      	push R19
                                  
-00014f 2f30                      	mov R19, DATA_TO_SEND	; copy number of spaces
+0000f2 2f30                      	mov R19, DATA_TO_SEND	; copy number of spaces
                                  
                                  	add_space_LCD_1:
-000150 e230                      	ldi R19, ' '			; load ASCII "space" symbol
-000151 df9e                      	rcall send_to_LCD		; and display on LCD screen
-000152 953a                      	dec R19
-000153 f7e1                      	brne add_space_LCD_1	; if not equal to zero go to add_space_LCD_1
+0000f3 e230                      	ldi R19, ' '			; load ASCII "space" symbol
+0000f4 dfa0                      	rcall send_to_LCD		; and display on LCD screen
+0000f5 953a                      	dec R19
+0000f6 f7e1                      	brne add_space_LCD_1	; if not equal to zero go to add_space_LCD_1
                                  
-000154 913f                      	pop R19
-000155 9508                      	ret
+0000f7 913f                      	pop R19
+0000f8 9508                      	ret
                                  
                                  ;---------------------------------------------------------
                                  ;     Function to copy constant values to CGRAM memory
@@ -1709,6 +1612,365 @@ C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\Assemb
                                  
                                  	;ldi 
                                  
+                                 .INCLUDE "DS18B20.inc"	; Sensor functions
+                                 
+                                  * DS18B20.inc
+                                  *
+                                  *  Created: 2018-07-17 19:16:33
+                                  *   Author: MO
+                                  */ 
+                                  ;---------------------------------------------------------
+                                 ;     Constant definitions
+                                 	.EQU	SYS_FREQ	 = 16000000
+                                 
+                                 	.EQU	READROM		 = 0x33		; read rom command
+                                 	.EQU	ROMCODE		 = 1
+                                 ;---------------------------------------------------------
+                                 ;     Initializing of sensor
+                                 ;		D_TEMP			register of direction DS18B20
+                                 ;		O_TEMP  = PORTD output port register of DS18B20
+                                 ;		TEMP_DQ = 6     number of DQ data line
+                                 ;		TEMP_PIN		PIN of used port
+                                 ;
+                                  DS18B20_Reset:
+0000f9 931f                      	push DELAY_TIME
+                                 
+0000fa 9a56                      	sbi	D_TEMP, TEMP_DQ
+0000fb 985e                      	cbi O_TEMP, TEMP_DQ
+                                 
+0000fc ef10                      	ldi DELAY_TIME, 240
+0000fd df4b                      	rcall delay_us
+0000fe df4a                      	rcall delay_us			; wait 480 us
+                                 
+0000ff 9856                      	cbi	D_TEMP, TEMP_DQ
+                                 
+000100 e416                      	ldi DELAY_TIME, 70
+000101 df47                      	rcall delay_us			; wait 70 us
+000102 9468                      	set
+000103 9b4e                      	sbis TEMP_PIN, TEMP_DQ
+000104 94e8                      	clt
+000105 ef10                      	ldi DELAY_TIME, 240
+000106 df42                      	rcall delay_us			; wait 240 us
+                                 
+000107 911f                      	pop DELAY_TIME
+000108 9508                      ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Send bit to sensor
+                                 ;		D_TEMP			register of direction DS18B20
+                                 ;		O_TEMP			output port register of DS18B20
+                                 ;		TEMP_DQ			number of DQ data line
+                                 ;					
+                                 DS18B20_Send_Bit:
+000109 931f                      	push DELAY_TIME
+                                 
+00010a f410                      	brcc Send_Bit_Zero
+00010b e011                      	ldi DELAY_TIME, 1
+00010c c001                      	rjmp Send_Bit_One
+                                 	Send_Bit_Zero:
+00010d e718                      	ldi DELAY_TIME, 120
+                                 	Send_Bit_One:
+00010e 9a56                      	sbi	D_TEMP, TEMP_DQ
+00010f df39                      	rcall delay_us
+000110 9856                      	cbi	D_TEMP, TEMP_DQ
+                                 
+000111 e31c                      	ldi DELAY_TIME, 60
+000112 df36                      	rcall delay_us			; wait 60 us
+                                 
+000113 911f                      	pop DELAY_TIME
+000114 9508                      ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Send byte to sensor
+                                 ;		D_TEMP			register of direction DS18B20
+                                 ;		O_TEMP			output port register of DS18B20
+                                 ;		TEMP_DQ			number of DQ data line
+                                 ;		DATA_TO_SEND	byte to write
+                                 ;		R24				counter			
+                                 DS18B20_Send_Byte:
+000115 938f                      	push R24
+                                 
+000116 e080                      	ldi R24, 0
+                                 	DS18B20_Send_Byte_loop:			;______
+000117 9507                      	ror DATA_TO_SEND				;	   \
+000118 dff0                      	rcall DS18B20_Send_Bit			;		|
+000119 9583                      	inc R24							; loop	|
+00011a 3088                      	cpi R24, 8						;		/
+00011b f7d9                      	brne DS18B20_Send_Byte_loop		;______/
+                                 
+00011c 918f                      	pop R24
+00011d 9508                      ret
+                                 
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Read bit from sensor
+                                 ;		D_TEMP			register of direction DS18B20
+                                 ;		O_TEMP			output port register of DS18B20
+                                 ;		TEMP_DQ			number of DQ data line
+                                 ;					
+                                 DS18B20_Read_Bit:
+00011e 931f                      	push DELAY_TIME
+                                 	
+00011f e011                      	ldi DELAY_TIME, 1
+000120 9a56                      	sbi	D_TEMP, TEMP_DQ
+000121 df27                      	rcall delay_us			; wait 1 us
+000122 9856                      	cbi	D_TEMP, TEMP_DQ
+000123 e015                      	ldi DELAY_TIME, 5
+000124 df24                      	rcall delay_us			; wait 5 us
+000125 94e8                      	clt
+000126 994e                      	sbic TEMP_PIN, TEMP_DQ
+000127 9468                      	set
+000128 e312                      	ldi DELAY_TIME, 50
+000129 df1f                      	rcall delay_us			; wait 50 us
+00012a 9408                      	sec
+00012b f00e                      	brts DS18B20_Read_Bit_End
+00012c 9488                      	clc
+                                 	DS18B20_Read_Bit_End:
+00012d 911f                      	pop DELAY_TIME
+00012e 9508                      ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Read byte from sensor
+                                 ;		D_TEMP			register of direction DS18B20
+                                 ;		O_TEMP			output port register of DS18B20
+                                 ;		TEMP_DQ			number of DQ data line
+                                 ;		DATA_TO_SEND	byte to read
+                                 ;		R24				counter			
+                                 DS18B20_Read_Byte:
+00012f 938f                      	push R24
+                                 
+000130 e080                      	ldi R24, 0
+                                 	DS18B20_Read_Byte_loop:			;______
+000131 dfec                      	rcall DS18B20_Read_Bit			;	   \
+000132 9507                      	ror DATA_TO_SEND				;	    |		
+000133 9583                      	inc R24							; loop	|
+000134 3088                      	cpi R24, 8						;		/
+000135 f7d9                      	brne DS18B20_Read_Byte_loop		;______/
+                                 
+000136 918f                      	pop R24
+000137 9508                      ret
+                                 ;---------------------------------------------------------
+                                 ;     Update CRC value
+                                 ;			
+                                 CRC8Update:
+000138 934f                      	  push	R20
+000139 935f                      	  push	R21
+00013a 936f                      	  push	R22
+00013b 934f                      	  push	R20
+                                 
+00013c e058                      	  ldi	R21, 8
+                                 	CRC8L:
+00013d 9160 0100                 	  lds	R22, _crc
+00013f 2746                      	  eor	R20, r22
+000140 9547                      	  ror	R20
+000141 9140 0100                 	  lds	R20, _crc
+000143 f410                      	  brcc	CRC8zero
+000144 e168                      	  ldi	R22, 0x18
+000145 2746                      	  eor	R20, R22
+                                 	CRC8zero:
+000146 9547                      	  ror	R20
+000147 9340 0100                 	  sts	_crc, R20
+000149 914f                      	  pop	R20
+00014a 9546                      	  lsr	R20
+00014b 934f                      	  push	R20
+00014c 955a                      	  dec	r21
+00014d f779                      	  brne	CRC8L
+00014e 914f                      	  pop	r20
+00014f 916f                      	  pop	r22
+000150 915f                      	  pop	r21
+000151 914f                      	  pop	r20
+000152 9508                       ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Clear CRC value
+                                 ;	
+                                 CRC8Init:
+000153 930f                      		push R16
+000154 e000                      		ldi	R16, 0
+000155 9300 0100                 		sts	_crc, R16
+000157 910f                      		pop	R16
+000158 9508                      ret
+                                 
+                                 ;---------------------------------------------------------
+                                 ;     Get CRC value
+                                 ;		DATA_TO_SEND	byte to read
+                                 ;
+                                 GetCRC8:
+000159 9100 0100                   lds	DATA_TO_SEND, _crc 
+00015b 9508                      
+                                 
+00015c 6554
+00015d 706d
+00015e 7265
+00015f 7461
+000160 7275
+000161 2065
+C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm(53): warning: .cseg .db misalignment - padding zero byte
+000162 00ff                      Text:	.db "Temperature ", END_OF_STRING ; declaring const string in program memory
+000163 7245
+000164 6f72
+000165 ff72                      ERR:	.db	"Error", END_OF_STRING
+                                 
+                                 start:
+000166 94f8                      cli					; disable interrupts 
+                                 
+000167 ec68                      ldi counter, 200
+000168 e072                      ldi RED_LED, 2	
+000169 e022                      ldi DELAY_MUL, 2
+00016a e015                      ldi DELAY_TIME, 5	
+                                 
+00016b e110                      ldi R17, high(RAMEND) ; initialization of stack pointer
+00016c ef0f                      ldi R16, low(RAMEND)
+00016d bf1e                      out SPH, R17
+00016e bf0d                      out SPL, R16
+                                 
+00016f deec                      rcall Ini_LCD		; initialization of LCD
+                                 
+000170 e0f2                      ldi ZH, high(Text<<1)	; load address of first character to pointer
+000171 ebe8                      ldi ZL, low(Text<<1)
+000172 df55                      rcall display_string_LCD
+                                 
+000173 2700                      clr R16
+000174 9100 00b0                 lds R16, TCCR2A		; load address of TCCR2A to R16
+000176 6c03                      ORI R16, (1<<COM2A1)|(1<<COM2A0)|(1<<WGM20)|(1<<WGM21) ; load data to R16 (logical OR operation), set OC2A on Compare Match, clear OC2A at BOTTOM (inverting mode) fastPWM
+000177 9300 00b0                 sts TCCR2A, R16		; store direct to data space I/O from R16
+                                 
+000179 9100 00b1                 lds R16, TCCR2B		; load address of TCCR2B to R16
+00017b 6001                      ORI R16, (1<<CS20)	; load to R16 data (logical OR operation), set (No prescaling)
+00017c 9300 00b1                 sts TCCR2B, R16		; store direct to data space I/O from R16
+                                 
+00017e 9100 00b3                 lds R16, OCR2A		; load address of OCR2A to R16
+000180 2f07                      mov R16, RED_LED	; load value to R16
+000181 9300 00b3                 sts OCR2A, R16		; store direct to data space from R16
+                                 
+000183 ec02                      ldi R16, (1<<COM0A1)|(1<<COM0A0)|(1<<WGM01) ; set compare output mode, clear OC0A at BOTTOM (inverting mode) CTC
+000184 bd04                      out TCCR0A, R16
+000185 e002                      ldi R16, (1<<CS01)	; set /8 (From prescaler)
+000186 bd05                      out TCCR0B, R16
+000187 ec08                      ldi R16, 200
+000188 bd07                      out OCR0A, R16
+000189 9100 006e                 lds R16, TIMSK0		; load address of TIMSK0 to R16
+00018b 6002                      ORI R16, (1<<OCIE0A); load to R16 data (logical OR operation), set interrupt on compare enable
+00018c 9300 006e                 sts TIMSK0, R16		; store direct to data space from R16
+                                 
+                                 ;sbi DDRC, DDC2		; set Data Direct Register as a input
+                                 ;sbi DDRC, DDC1		; set Data Direct Register as a input
+00018e 9a57                      sbi DDRD, DDD7
+00018f 9a50                      sbi DDRD, (0<<DDD5) ; set Data Direct Register as a output (connected button)
+                                 
+000190 e006                      ldi R16, (1<<PINC1)|(1<<PINC2) ; set Port as a output
+000191 b908                      out PORTC, R16 
+000192 e200                      ldi R16, (0<<PIND7)|(1<<PIND5) ; pull-up internal resistor in PIND6
+000193 b90b                      out PORTD, R16 
+000194 9478                      sei					; enable interrupts 
+                                 
+                                 ;*************************************************
+                                 main:				; main loop
+000195 e614                      ldi DELAY_TIME, 100
+000196 e021                      ldi DELAY_MUL, 1
+000197 940e 0030                 call delay_ms
+000199 994d                      sbic PIND, PIND5	; wait for pushed button (if PIND6 is clear, skip next instruction)
+00019a cffa                      rjmp main
+00019b 0000                      nop
+                                 
+00019c e006                      ldi DATA_TO_SEND, 6
+00019d df34                      rcall show_dec_LCD
+                                 
+                                 DS18B20:
+00019e df5a                      rcall DS18B20_Reset
+00019f f3f6                      brts  DS18B20
+                                 
+0001a0 e303                      ldi DATA_TO_SEND, READROM
+0001a1 df73                      rcall DS18B20_Send_Byte
+                                 
+0001a2 dfb0                      rcall	CRC8Init
+                                 
+0001a3 df8b                      rcall DS18B20_Read_Byte
+0001a4 3000                      cpi DATA_TO_SEND, 0
+0001a5 f169                      breq error
+                                 
+0001a6 df91                      rcall CRC8Update
+                                 
+0001a7 e0c1                      ldi   YL, LOW(SerialNumber)	    
+0001a8 e0d1                      ldi	  YH, HIGH(SerialNumber)	; Load to Y address of SerialNumber table
+                                 
+0001a9 9309                      st	   Y+, DATA_TO_SEND	
+                                 
+0001aa e087                      ldi R24, 7
+                                 Storeloop:
+0001ab df83                      rcall DS18B20_Read_Byte
+0001ac df8b                      rcall CRC8Update
+0001ad 9309                      st	   Y+, DATA_TO_SEND	          ; store next byte to table, and increment pointer
+0001ae 958a                      dec	  R24	                      ; decrement loop counter
+0001af f7d9                      brne  StoreLoop					  ; if greater than zero, jump to StoreLoop
+                                 
+0001b0 dfa8                      rcall	GetCRC8	                  ; Read computed CRC8
+0001b1 3000                      cpi		DATA_TO_SEND, 0	          ; copmare it with zero
+0001b2 f501                      brne	error	                  ; if not equal, jump to MainLoop (bad CRC)
+                                 
+                                 
+0001b3 e0f2                      ldi ZH, high(ERR<<1)	; load address of first character to pointer
+0001b4 ece6                      ldi ZL, low(ERR<<1)
+0001b5 df12                      rcall display_string_LCD
+                                 
+0001b6 ea08                      ldi DATA_TO_SEND, 40|(1<<LCD_DDADR)
+0001b7 ded9                      rcall instruction_LCD
+                                 
+                                 
+0001b8 e088                      ldi	  R24, 8	                   ; 8 digits to display
+0001b9 e0c1                      ldi   YL, LOW(SerialNumber)	    
+0001ba e0d1                      ldi	  YH, HIGH(SerialNumber)	   ; Load to Z address of SerialNumber table
+                                 LoadLoop:
+0001bb 9109                      ld	  DATA_TO_SEND, Y+
+0001bc df15                      rcall show_dec_LCD
+0001bd 958a                      dec		R24	                       ; decrement loop conouter
+0001be f7e1                      brne	LoadLoop	               ; if not zero, jump to LoadLoop
+                                 
+0001bf 9573                      inc RED_LED			; increment value
+0001c0 3f7c                      cpi	RED_LED, 252	; if R18 equals or higher 252 do next command
+0001c1 f458                      brsh toone
+0001c2 9180 00b3                 lds R24, OCR2A		; load address of OCR2A to R16
+0001c4 2f87                      mov R24, RED_LED	; load value to R16
+0001c5 9380 00b3                 sts OCR2A, R24		; store direct to data space from R16
+0001c7 0000                      nop 
+0001c8 e114                      ldi DELAY_TIME, 20
+0001c9 e021                      ldi DELAY_MUL, 1
+0001ca 940e 0030                 call delay_ms
+0001cc cfc8                      rjmp main
+                                 toone: 
+0001cd e071                      ldi RED_LED, 1
+0001ce e01f                      ldi DELAY_TIME, 15
+0001cf e021                      ldi DELAY_MUL, 1
+0001d0 940e 0030                 call delay_ms
+0001d2 cfc2                      rjmp main
+                                 ;*************************************************		
+                                 error:
+0001d3 e0f2                      ldi ZH, high(ERR<<1)	; load address of first character to pointer
+0001d4 ece6                      ldi ZL, low(ERR<<1)
+0001d5 def2                      rcall display_string_LCD
+0001d6 cfbe                      rjmp main
+                                 ;---------------------------------------------------------
+                                 ;     Interrupt functions
+                                 
+                                 Tim0_compA:
+0001d7 932f                      push R18
+0001d8 956a                      dec counter			; decrement value
+0001d9 3061                      cpi counter, 1		
+0001da f040                      brlo zero			; if value counter lower than 1 go to zero
+0001db 1767                      cp counter, RED_LED
+0001dc f418                      brsh off			; if value of register R18 higher or same go to off
+0001dd e026                      ldi R18, (1<<PINC1)|(1<<PINC2) ;set Port as a input
+0001de b928                      out PORTC, R18
+0001df c004                      rjmp back
+                                 off:
+0001e0 e020                      ldi R18, (0<<PINC1)|(0<<PINC2) ; set Port as a output
+0001e1 b928                      out PORTC, R18 
+0001e2 c001                      rjmp back
+                                 zero:
+0001e3 ec68                      ldi counter, 200
+                                 back:
+0001e4 912f                      pop R18
+0001e5 9518                      reti				; return from interrupt 
 
 
 RESOURCE USE INFORMATION
@@ -1726,40 +1988,40 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega644P" register use summary:
-x  :   0 y  :   0 z  :   1 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
+x  :   0 y  :   3 z  :   1 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  63 r17:  23 r18:  18 r19:  19 r20:   8 
-r21:   8 r22:   9 r23:   7 r24:   3 r25:   0 r26:   0 r27:   0 r28:   0 
-r29:   0 r30:   1 r31:   1 
-Registers used: 12 out of 35 (34.3%)
+r13:   0 r14:   0 r15:   0 r16:  76 r17:  39 r18:  19 r19:  19 r20:  21 
+r21:  12 r22:  15 r23:   7 r24:  17 r25:   0 r26:   0 r27:   0 r28:   2 
+r29:   2 r30:   3 r31:   3 
+Registers used: 15 out of 35 (42.9%)
 
 "ATmega644P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   2 brge  :   0 brhc  :   0 
+brcc  :   2 brcs  :   0 break :   0 breq  :   3 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   3 brlt  :   0 brmi  :   0 
-brne  :  10 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   2 cbi   :  19 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   3 cls   :   0 
-clt   :   1 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
-cpi   :   3 cpse  :   0 dec   :   9 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   3 jmp   :   2 
-ld    :   0 ldd   :   0 ldi   :  42 lds   :   5 lpm   :   1 lsl   :   0 
-lsr   :   0 mov   :  11 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :  17 or    :   0 ori   :   6 out   :   9 pop   :  18 
-push  :  18 rcall :  23 ret   :  10 reti  :   1 rjmp  :   8 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :  24 sbic  :   1 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   8 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   2 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   5 
+brne  :  16 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   2 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   3 cbi   :  23 cbr   :   0 
+clc   :   1 clh   :   0 cli   :   1 cln   :   0 clr   :   3 cls   :   0 
+clt   :   3 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
+cpi   :   7 cpse  :   0 dec   :  12 eor   :   2 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   5 jmp   :   2 
+ld    :   1 ldd   :   0 ldi   :  71 lds   :   8 lpm   :   1 lsl   :   0 
+lsr   :   1 mov   :  11 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :  17 or    :   0 ori   :   6 out   :   9 pop   :  28 
+push  :  28 rcall :  47 ret   :  18 reti  :   1 rjmp  :  10 rol   :   0 
+ror   :   4 sbc   :   0 sbci  :   0 sbi   :  28 sbic  :   2 sbis  :   1 
+sbiw  :   0 sbr   :   0 sbrc  :   8 sbrs  :   0 sec   :   1 seh   :   0 
+sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   4 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   2 std   :   0 sts   :   7 
 sub   :   0 subi  :   4 swap  :   0 tst   :   2 wdr   :   0 
-Instructions used: 35 out of 113 (31.0%)
+Instructions used: 45 out of 113 (39.8%)
 
 "ATmega644P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0002ac    582     14    596   65536   0.9%
-[.dseg] 0x000100 0x000100      0      0      0    4096   0.0%
+[.cseg] 0x000000 0x0003cc    864     20    884   65536   1.3%
+[.dseg] 0x000100 0x000109      0      9      9    4096   0.2%
 [.eseg] 0x000000 0x000000      0      0      0    2048   0.0%
 
 Assembly complete, 0 errors, 1 warnings

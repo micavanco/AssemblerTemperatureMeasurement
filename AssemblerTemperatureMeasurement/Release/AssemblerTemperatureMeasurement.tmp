@@ -13,6 +13,7 @@
   <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.1.130\avrasm\inc\m644Pdef.inc</FILE>
   <FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE>
   <FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE>
+  <FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE>
  </INCLUDED_FILES>
  <OBJECT_FILES>
   <FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Release\AssemblerTemperatureMeasurement.obj</FILE>
@@ -25,17 +26,11 @@
   <FILE>AssemblerTemperatureMeasurement.lss</FILE>
  </OUTPUT_FILES>
  <LABELS>
-  <start><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>37</LINE></start>
-  <Tim0_compA><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>117</LINE></Tim0_compA>
-  <Text><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>35</LINE></Text>
-  <Ini_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>45</LINE></Ini_LCD>
-  <display_string_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>199</LINE></display_string_LCD>
-  <main><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>91</LINE></main>
-  <toone><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>106</LINE></toone>
+  <_crc><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>38</LINE></_crc>
+  <SerialNumber><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>39</LINE></SerialNumber>
+  <start><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>56</LINE></start>
+  <Tim0_compA><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>197</LINE></Tim0_compA>
   <delay_ms><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>10</LINE></delay_ms>
-  <zero><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>131</LINE></zero>
-  <off><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>127</LINE></off>
-  <back><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>133</LINE></back>
   <Wait_ms_0><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>20</LINE></Wait_ms_0>
   <Wait_ms_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>22</LINE></Wait_ms_1>
   <Wait_ms_2><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>24</LINE></Wait_ms_2>
@@ -43,21 +38,49 @@
   <delay_us><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>44</LINE></delay_us>
   <Wait_us_0><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>51</LINE></Wait_us_0>
   <Wait_us_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\Delay.inc</FILE><LINE>53</LINE></Wait_us_1>
+  <Ini_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>45</LINE></Ini_LCD>
   <Ini_LCD_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>79</LINE></Ini_LCD_1>
   <instruction_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>117</LINE></instruction_LCD>
   <clear_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>172</LINE></clear_LCD>
   <send_to_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>125</LINE></send_to_LCD>
   <return_cursor><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>184</LINE></return_cursor>
+  <display_string_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>199</LINE></display_string_LCD>
   <loop_dsp_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>204</LINE></loop_dsp_1>
   <end_dsp_loop><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>212</LINE></end_dsp_loop>
   <show_dec_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>220</LINE></show_dec_LCD>
-  <loop_show_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>228</LINE></loop_show_1>
-  <loop_show_2><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>234</LINE></loop_show_2>
-  <loop_show_3><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>243</LINE></loop_show_3>
-  <loop_show_4><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>249</LINE></loop_show_4>
-  <loop_show_5><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>255</LINE></loop_show_5>
-  <loop_show_6><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>260</LINE></loop_show_6>
-  <add_space_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>272</LINE></add_space_LCD>
-  <add_space_LCD_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>277</LINE></add_space_LCD_1>
+  <loop_show_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>227</LINE></loop_show_1>
+  <loop_show_2><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>233</LINE></loop_show_2>
+  <loop_show_3><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>242</LINE></loop_show_3>
+  <loop_show_4><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>248</LINE></loop_show_4>
+  <loop_show_5><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>254</LINE></loop_show_5>
+  <loop_show_6><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>259</LINE></loop_show_6>
+  <add_space_LCD><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>270</LINE></add_space_LCD>
+  <add_space_LCD_1><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\LCD.inc</FILE><LINE>275</LINE></add_space_LCD_1>
+  <DS18B20_Reset><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>20</LINE></DS18B20_Reset>
+  <DS18B20_Send_Bit><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>49</LINE></DS18B20_Send_Bit>
+  <Send_Bit_Zero><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>55</LINE></Send_Bit_Zero>
+  <Send_Bit_One><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>57</LINE></Send_Bit_One>
+  <DS18B20_Send_Byte><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>75</LINE></DS18B20_Send_Byte>
+  <DS18B20_Send_Byte_loop><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>79</LINE></DS18B20_Send_Byte_loop>
+  <DS18B20_Read_Bit><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>96</LINE></DS18B20_Read_Bit>
+  <DS18B20_Read_Bit_End><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>113</LINE></DS18B20_Read_Bit_End>
+  <DS18B20_Read_Byte><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>124</LINE></DS18B20_Read_Byte>
+  <DS18B20_Read_Byte_loop><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>128</LINE></DS18B20_Read_Byte_loop>
+  <CRC8Update><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>140</LINE></CRC8Update>
+  <CRC8L><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>147</LINE></CRC8L>
+  <CRC8zero><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>155</LINE></CRC8zero>
+  <CRC8Init><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>172</LINE></CRC8Init>
+  <GetCRC8><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\DS18B20.inc</FILE><LINE>183</LINE></GetCRC8>
+  <Text><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>53</LINE></Text>
+  <ERR><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>54</LINE></ERR>
+  <main><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>110</LINE></main>
+  <DS18B20><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>121</LINE></DS18B20>
+  <error><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>189</LINE></error>
+  <Storeloop><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>142</LINE></Storeloop>
+  <LoadLoop><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>165</LINE></LoadLoop>
+  <toone><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>182</LINE></toone>
+  <zero><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>211</LINE></zero>
+  <off><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>207</LINE></off>
+  <back><FILE>C:\Users\MO\Documents\Embedded_C_projects\AssemblerTemperatureMeasurement\AssemblerTemperatureMeasurement\main.asm</FILE><LINE>213</LINE></back>
  </LABELS>
 </ASSEMBLER_INFO>

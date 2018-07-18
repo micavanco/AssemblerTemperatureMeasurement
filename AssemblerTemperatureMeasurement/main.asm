@@ -6,7 +6,7 @@
 
 .include "m644Pdef.inc"
 
- ;-------------------------------------------
+;-------------------------------------------
 ;    Declaring constants for LCD driver
 .EQU D_LCD	 = DDRA  ; register of direction LCD
 .EQU O_LCD   = PORTA ; output port register of LCD
@@ -17,22 +17,41 @@
 .EQU LCD_DB6 = 6     ; number of DB6 signal line
 .EQU LCD_DB7 = 7     ; number of DB7 signal line
 
+;-------------------------------------------
+;    Declaring constants for DS18B20 driver
+.EQU D_TEMP	 = DDRD  ; register of direction DS18B20
+.EQU O_TEMP  = PORTD ; output port register of DS18B20
+.EQU TEMP_DQ = PD6   ; number of DQ data line
+.EQU TEMP_PIN= PIND
 
-.DEF DATA_TO_SEND=R16
-.DEF DELAY_TIME=R17
-.DEF DELAY_MUL=R18
-.DEF RED_LED=R23	; defining variables
-.DEF GREEN_LED=R20
-.DEF BLUE_LED=R21
-.DEF counter=R22
+
+.DEF DATA_TO_SEND = R16
+.DEF DELAY_TIME   = R17
+.DEF DELAY_MUL    = R18
+.DEF RED_LED      = R23			; defining variables
+.DEF GREEN_LED    = R20
+.DEF BLUE_LED     = R21
+.DEF counter      = R22
+
+.DSEG
+.ORG 0x100
+	_crc:			.BYTE 1
+	SerialNumber:	.BYTE 8
 
 .CSEG 
 .org 0 jmp start
 .org OC0Aaddr jmp Tim0_compA  ; Overflow0 Interrupt Vector Address
-.org 0x30			 ; jump to first section after interrupt vectors
+.org 0x30					  ; jump to first section after interrupt vectors
+
+;---------------------------------------------------------
+;     Include external files
+.INCLUDE "Delay.inc"	; Delay functions
+.INCLUDE "LCD.inc"		; LCD functions
+.INCLUDE "DS18B20.inc"	; Sensor functions
 
 
 Text:	.db "Temperature ", END_OF_STRING ; declaring const string in program memory
+ERR:	.db	"Error", END_OF_STRING
 
 start:
 cli					; disable interrupts 
@@ -78,20 +97,77 @@ sts TIMSK0, R16		; store direct to data space from R16
 
 ;sbi DDRC, DDC2		; set Data Direct Register as a input
 ;sbi DDRC, DDC1		; set Data Direct Register as a input
-;sbi DDRD, DDD7
-sbi DDRD, (0<<DDD6) ; set Data Direct Register as a output (connected button)
+sbi DDRD, DDD7
+sbi DDRD, (0<<DDD5) ; set Data Direct Register as a output (connected button)
 
 ldi R16, (1<<PINC1)|(1<<PINC2) ; set Port as a output
 out PORTC, R16 
-ldi R16, (0<<PIND7)|(1<<PIND6) ; pull-up internal resistor in PIND6
+ldi R16, (0<<PIND7)|(1<<PIND5) ; pull-up internal resistor in PIND6
 out PORTD, R16 
 sei					; enable interrupts 
 
 ;*************************************************
 main:				; main loop
-sbic PIND, PIND6	; wait for pushed button (if PIND6 is clear, skip next instruction)
+ldi DELAY_TIME, 100
+ldi DELAY_MUL, 1
+call delay_ms
+sbic PIND, PIND5	; wait for pushed button (if PIND6 is clear, skip next instruction)
 rjmp main
 nop
+
+ldi DATA_TO_SEND, 6
+rcall show_dec_LCD
+
+DS18B20:
+rcall DS18B20_Reset
+brts  DS18B20
+
+ldi DATA_TO_SEND, READROM
+rcall DS18B20_Send_Byte
+
+rcall	CRC8Init
+
+rcall DS18B20_Read_Byte
+cpi DATA_TO_SEND, 0
+breq error
+
+rcall CRC8Update
+
+ldi   YL, LOW(SerialNumber)	    
+ldi	  YH, HIGH(SerialNumber)	; Load to Y address of SerialNumber table
+
+st	   Y+, DATA_TO_SEND	
+
+ldi R24, 7
+Storeloop:
+rcall DS18B20_Read_Byte
+rcall CRC8Update
+st	   Y+, DATA_TO_SEND	          ; store next byte to table, and increment pointer
+dec	  R24	                      ; decrement loop counter
+brne  StoreLoop					  ; if greater than zero, jump to StoreLoop
+
+rcall	GetCRC8	                  ; Read computed CRC8
+cpi		DATA_TO_SEND, 0	          ; copmare it with zero
+brne	error	                  ; if not equal, jump to MainLoop (bad CRC)
+
+
+ldi ZH, high(ERR<<1)	; load address of first character to pointer
+ldi ZL, low(ERR<<1)
+rcall display_string_LCD
+
+ldi DATA_TO_SEND, 40|(1<<LCD_DDADR)
+rcall instruction_LCD
+
+
+ldi	  R24, 8	                   ; 8 digits to display
+ldi   YL, LOW(SerialNumber)	    
+ldi	  YH, HIGH(SerialNumber)	   ; Load to Z address of SerialNumber table
+LoadLoop:
+ld	  DATA_TO_SEND, Y+
+rcall show_dec_LCD
+dec		R24	                       ; decrement loop conouter
+brne	LoadLoop	               ; if not zero, jump to LoadLoop
+
 inc RED_LED			; increment value
 cpi	RED_LED, 252	; if R18 equals or higher 252 do next command
 brsh toone
@@ -110,7 +186,11 @@ ldi DELAY_MUL, 1
 call delay_ms
 rjmp main
 ;*************************************************		
-
+error:
+ldi ZH, high(ERR<<1)	; load address of first character to pointer
+ldi ZL, low(ERR<<1)
+rcall display_string_LCD
+rjmp main
 ;---------------------------------------------------------
 ;     Interrupt functions
 
@@ -133,7 +213,3 @@ ldi counter, 200
 back:
 pop R18
 reti				; return from interrupt 
-;---------------------------------------------------------
-;     Include external files
-.INCLUDE "Delay.inc"	; Delay functions
-.INCLUDE "LCD.inc"		; LCD functions

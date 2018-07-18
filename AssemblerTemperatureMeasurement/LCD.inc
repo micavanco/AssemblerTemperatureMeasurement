@@ -100,7 +100,7 @@ Ini_LCD:
 	ldi DATA_TO_SEND, (1<<LCD_MODE)|(1<<LCD_T_INC)
 	rcall instruction_LCD
 
-	ldi DATA_TO_SEND, (1<<LCD_CTRL)|(1<<LCD_SW_ON)|(1<<LCD_SK_ON)|(1<<LCD_SM_ON)
+	ldi DATA_TO_SEND, (1<<LCD_CTRL)|(1<<LCD_SW_ON)|(1<<LCD_SK_OFF)|(1<<LCD_SM_OFF)
 	rcall instruction_LCD
 
 	sbi O_LCD, LCD_RS
@@ -218,7 +218,6 @@ display_string_LCD:
 ;     Function to display decimal number
 
 show_dec_LCD:
-	push DATA_TO_SEND		; put value on stack
 	push R19				; put value on stack
 
 	mov R19, DATA_TO_SEND
@@ -263,7 +262,6 @@ show_dec_LCD:
 	rcall send_to_LCD		; and display on LCD screen
 
 	pop R19					; take value from stack
-	pop DATA_TO_SEND		; take value from stack
 	ret	 
 
 ;---------------------------------------------------------

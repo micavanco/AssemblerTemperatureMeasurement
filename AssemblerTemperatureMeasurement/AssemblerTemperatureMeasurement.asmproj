@@ -67,6 +67,9 @@
     <Compile Include="Delay.inc">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DS18B20.inc">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LCD.inc">
       <SubType>Code</SubType>
     </Compile>
